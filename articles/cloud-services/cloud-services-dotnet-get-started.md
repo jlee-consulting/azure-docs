@@ -3,13 +3,13 @@ title: Get started with Azure Cloud Services and ASP.NET | Microsoft Docs
 description: Learn how to create a multi-tier app using ASP.NET MVC and Azure. The app runs in a cloud service, with web role and worker role. It uses Entity Framework, SQL Database, and Azure Storage queues and blobs.
 services: cloud-services, storage
 documentationcenter: .net
-author: georgewallace
+author: tgore03
 manager: carmonm
 ms.service: cloud-services
 ms.devlang: dotnet
 ms.topic: conceptual
 ms.date: 05/15/2017
-ms.author: gwallace
+ms.author: tagore
 
 ---
 # Get started with Azure Cloud Services and ASP.NET
@@ -147,7 +147,7 @@ When the app runs in the cloud, it will use a cloud-based database.
 8. Check **Allow azure services to access server**.
 9. Click **Select** for the new server.
 
-    ![New SQL Database server](./media/cloud-services-dotnet-get-started/newdbserver.png)
+    ![New server](./media/cloud-services-dotnet-get-started/newdbserver.png)
 10. Click **Create**.
 
 ### Create an Azure storage account
@@ -772,3 +772,6 @@ For more information, see the following resources:
 * [How to manage Cloud Services](cloud-services-how-to-manage-portal.md)
 * [Azure Storage](https://docs.microsoft.com/azure/storage/)
 * [How to choose a cloud service provider](https://azure.microsoft.com/overview/choosing-a-cloud-service-provider/)
+
+
+

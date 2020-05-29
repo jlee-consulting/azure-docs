@@ -1,7 +1,6 @@
 ---
-title: Outbound rules in Azure Load Balancer
-titlesuffix: Azure Load Balancer
-description: Use outbound rules to define outbound network address translations
+title: Outbound rules - Azure Load Balancer
+description: With this learning path, get starting using outbound rules to define outbound network address translations.
 services: load-balancer
 documentationcenter: na
 author: asudbring
@@ -30,7 +29,7 @@ Outbound rules allow you to control:
 - how [outbound SNAT ports](load-balancer-outbound-connections.md#snat) should be allocated.
 - which protocols to provide outbound translation for.
 - what duration to use for outbound connection idle timeout (4-120 minutes).
-- whether to send a TCP Reset on idle timeout (in Public Preview). 
+- whether to send a TCP Reset on idle timeout
 
 Outbound rules expand [scenario 2](load-balancer-outbound-connections.md#lb) in described in the [outbound connections](load-balancer-outbound-connections.md) article and the scenario precedence remains as-is.
 
@@ -62,7 +61,7 @@ API version "2018-07-01" permits an outbound rule definition structured as follo
 
 ### <a name="scale"></a> Scale outbound NAT with multiple IP addresses
 
-While an outbound rule can be used with just a single public IP address, outbound rules ease the configuration burden for scaling outbound NAT. You can use multiple IP addresses to plan for large-scale scenarios and you can use outbound rules to mitigate [SNAT exhaustion](load-balancer-outbound-connections.md#snatexhaust) prone patterns.  
+While an outbound rule can be used with just a single public IP address, outbound rules ease the configuration burden for scaling outbound NAT. You can use multiple IP addresses to plan for large-scale scenarios and you can use outbound rules to mitigate [SNAT exhaustion](troubleshoot-outbound-connection.md#snatexhaust) prone patterns.  
 
 Each additional IP address provided by a frontend provides 64,000 ephemeral ports for Load Balancer to use as SNAT ports. While load balancing or inbound NAT rules have a single frontend, the outbound rule expands the frontend notion and allows multiple frontends per rule.  With multiple frontends per rule, the quantity of available SNAT ports is multiplied with each public IP address, and large scenarios can be supported.
 
@@ -81,7 +80,7 @@ Use the following parameter to allocate 10,000 SNAT ports per VM (NIC IP configu
 
 Each public IP address from all frontends of an outbound rule contributes up to 64,000 ephemeral ports for use as SNAT ports.  Load Balancer allocates SNAT ports in multiples of 8. If you provide a value not divisible by 8, the configuration operation is rejected.  If you attempt to allocate more SNAT ports than are available based on the number of public IP addresses, the configuration operation is rejected.  For example, if you allocate 10,000 ports per VM and 7 VMs in a backend pool would share a single public IP address, the configuration is rejected (7 x 10,000 SNAT ports > 64,000 SNAT ports).  You can add more public IP addresses to the frontend of the outbound rule to enable the scenario.
 
-You can revert back to [automatic SNAT port allocation based on backend pool size](load-balancer-outbound-connections.md#preallocatedports) by specifying 0 for number of ports.
+You can revert back to [automatic SNAT port allocation based on backend pool size](load-balancer-outbound-connections.md#preallocatedports) by specifying 0 for number of ports. In that case the first 50 VM instances will get 1024 ports, 51-100 VM instances will get 512 and so on according to the table.
 
 ### <a name="idletimeout"></a> Control outbound flow idle timeout
 
@@ -91,7 +90,7 @@ Use the following parameter to set the outbound idle timeout to 1 hour:
 
           "idleTimeoutInMinutes": 60
 
-### <a name="tcprst"></a> <a name="tcpreset"></a> Enable TCP Reset on idle timeout (Preview)
+### <a name="tcprst"></a> <a name="tcpreset"></a> Enable TCP Reset on idle timeout
 
 The default behavior of Load Balancer is to drop the flow silently when the outbound idle timeout has been reached.  With the enableTCPReset parameter, you can enable a more predictable application behavior and control whether to send bidirectional TCP Reset (TCP RST) at the time out of outbound idle timeout. 
 
@@ -99,7 +98,7 @@ Use the following parameter to enable TCP Reset on an outbound rule:
 
            "enableTcpReset": true
 
-Review [TCP Reset on idle timeout (Preview)](https://aka.ms/lbtcpreset) for details including region availability.
+Review [TCP Reset on idle timeout](https://aka.ms/lbtcpreset) for details including region availability.
 
 ### <a name="proto"></a> Support both TCP and UDP transport protocols with a single rule
 
@@ -202,7 +201,6 @@ When using an internal Standard Load Balancer, outbound NAT is not available unt
 - The maximum number of usable ephemeral ports per frontend IP address is 64,000.
 - The range of the configurable outbound idle timeout is 4 to 120 minutes (240 to 7200 seconds).
 - Load Balancer does not support ICMP for outbound NAT.
-- Portal cannot be used to configure or view outbound rules.  Use templates, REST API, Az CLI 2.0, or PowerShell instead.
 - Outbound rules can only be applied to primary IP configuration of a NIC.  Multiple NICs are supported.
 
 ## Next steps

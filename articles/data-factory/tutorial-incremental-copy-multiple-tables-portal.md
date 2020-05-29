@@ -1,19 +1,22 @@
 ---
-title: 'Incrementally copy multiple tables by using Azure Data Factory | Microsoft Docs'
-description: 'In this tutorial, you create an Azure Data Factory pipeline that copies delta data incrementally from multiple tables in an on-premises SQL Server database to an Azure SQL database.'
+title: Incrementally copy multiple tables using Azure portal
+description: In this tutorial, you create an Azure Data Factory pipeline that copies delta data incrementally from multiple tables in an on-premises SQL Server database to an Azure SQL database.
 services: data-factory
-documentationcenter: ''
+ms.author: yexu
 author: dearandyxu
-manager: craigg
+manager: shwang
 ms.reviewer: douglasl
-
 ms.service: data-factory
 ms.workload: data-services
 ms.topic: tutorial
+ms.custom: seo-lt-2019; seo-dt-2019
 ms.date: 01/20/2018
-ms.author: yexu
 ---
+
 # Incrementally load data from multiple tables in SQL Server to an Azure SQL database
+
+[!INCLUDE[appliesto-adf-xxx-md](includes/appliesto-adf-xxx-md.md)]
+
 In this tutorial, you create an Azure data factory with a pipeline that loads delta data from multiple tables in on-premises SQL Server to an Azure SQL database.    
 
 You perform the following steps in this tutorial:
@@ -61,7 +64,7 @@ If you don't have an Azure subscription, create a [free](https://azure.microsoft
 
 ## Prerequisites
 * **SQL Server**. You use an on-premises SQL Server database as the source data store in this tutorial. 
-* **Azure SQL Database**. You use a SQL database as the sink data store. If you don't have a SQL database, see [Create an Azure SQL database](../sql-database/sql-database-get-started-portal.md) for steps to create one. 
+* **Azure SQL Database**. You use a SQL database as the sink data store. If you don't have a SQL database, see [Create an Azure SQL database](../azure-sql/database/single-database-create-quickstart.md) for steps to create one. 
 
 ### Create source tables in your SQL Server database
 
@@ -241,7 +244,7 @@ END
      
     - Select **Use existing**, and select an existing resource group from the drop-down list. 
     - Select **Create new**, and enter the name of a resource group.   
-    To learn about resource groups, see [Using resource groups to manage your Azure resources](../azure-resource-manager/resource-group-overview.md).  
+    To learn about resource groups, see [Using resource groups to manage your Azure resources](../azure-resource-manager/management/overview.md).  
 6. Select **V2** for the **version**.
 7. Select the **location** for the data factory. Only locations that are supported are displayed in the drop-down list. The data stores (Azure Storage, Azure SQL Database, etc.) and computes (HDInsight, etc.) used by data factory can be in other regions.
 8. Click **Create**.      
@@ -303,7 +306,7 @@ In the last step, you create a linked service to link your source SQL Server dat
 1. In the **New Linked Service** window, do the following steps:
 
     1. Enter **AzureSqlDatabaseLinkedService** for **Name**. 
-    1. For **Server name**, select the name of your Azure SQL server from the drop-down list. 
+    1. For **Server name**, select the name of your server from the drop-down list. 
     1. For **Database name**, select the Azure SQL database in which you created customer_table and project_table as part of the prerequisites. 
     1. For **User name**, enter the name of user that has access to the Azure SQL database. 
     1. For **Password**, enter the **password** for the user. 
