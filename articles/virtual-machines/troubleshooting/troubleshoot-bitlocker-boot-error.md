@@ -20,8 +20,6 @@ ms.custom: has-adal-ref
 
  This article describes BitLocker errors that you may experience when you start a Windows virtual machine (VM) in Microsoft Azure.
 
- 
-
 ## Symptom
 
  A Windows VM doesn't start. When you check the screenshots in the [Boot diagnostics](./boot-diagnostics.md) window, you see one of the following error messages:
@@ -39,6 +37,9 @@ This problem may occur if the VM cannot locate the BitLocker Recovery Key (BEK) 
 
 ## Solution
 
+> [!TIP]
+> If you have a recent backup of the VM, you may try [restoring the VM from the backup](../../backup/backup-azure-arm-restore-vms.md) to fix the boot problem.
+
 To resolve this problem, stop and deallocate the VM, and then start it. This operation forces the VM to retrieve the BEK file from the Azure Key Vault, and then put it on the encrypted disk. 
 
 If this method does not the resolve the problem, follow these steps to restore the BEK file manually:
@@ -53,11 +54,10 @@ If this method does not the resolve the problem, follow these steps to restore t
     $osDiskName = "ProblemOsDisk"
     # Set the EncryptionSettingsEnabled property to false, so you can attach the disk to the recovery VM.
     New-AzDiskUpdateConfig -EncryptionSettingsEnabled $false |Update-AzDisk -diskName $osDiskName -ResourceGroupName $rgName
+    $osDisk = Get-AzDisk -ResourceGroupName $rgName -DiskName $osDiskName;
 
     $recoveryVMName = "myRecoveryVM" 
     $recoveryVMRG = "RecoveryVMRG" 
-    $OSDisk = Get-AzDisk -ResourceGroupName $rgName -DiskName $osDiskName;
-
     $vm = get-AzVM -ResourceGroupName $recoveryVMRG -Name $recoveryVMName 
 
     Add-AzVMDataDisk -VM $vm -Name $osDiskName -ManagedDiskId $osDisk.Id -Caching None -Lun 3 -CreateOption Attach 
