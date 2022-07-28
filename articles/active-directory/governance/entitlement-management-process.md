@@ -3,17 +3,16 @@ title: Request process & notifications - Azure AD entitlement management
 description: Learn about the request process for an access package and when email notifications are sent in Azure Active Directory entitlement management.
 services: active-directory
 documentationCenter: ''
-author: ajburnle
-manager: daveba
+author: owinfreyatl
+manager: karenhoran
 editor: mamtakumar
 ms.service: active-directory
 ms.workload: identity
 ms.tgt_pltfrm: na
-ms.devlang: na
 ms.topic: conceptual
 ms.subservice: compliance
 ms.date: 5/17/2021
-ms.author: ajburnle
+ms.author: owinfrey
 ms.reviewer: mamkumar
 ms.collection: M365-identity-device-management
 
@@ -48,6 +47,9 @@ A user that needs access to an access package can submit an access request. Depe
 If you're an approver, you're sent email notifications when you need to approve an access request. You also receive notifications when an access request has been completed. You're also sent email notifications that indicate the status of your request if you're a requestor.
 
 The following diagrams show when these email notifications are sent to either the approvers or the requestor. Reference the [email notifications table](entitlement-management-process.md#email-notifications-table) to find the corresponding number to the email notifications displayed in the diagrams.
+
+> [!NOTE]
+> If the admin directly assigns a user to an access package, you won't receive an email notification when an access request has been completed or denied. Email notifications are sent only when a user makes a request for access.
 
 ### First approvers and alternate approvers
 The following diagram shows the experience of first approvers and alternate approvers, and the email notifications they receive during the request process:

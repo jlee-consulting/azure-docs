@@ -3,23 +3,23 @@ title: Configure Azure resource role settings in PIM - Azure AD | Microsoft Docs
 description: Learn how to configure Azure resource role settings in Azure AD Privileged Identity Management (PIM).
 services: active-directory
 documentationcenter: ''
-author: curtand
-manager: daveba
+author: mtillman
+manager: karenhoran
 ms.service: active-directory
-ms.devlang: na
 ms.topic: how-to
 ms.tgt_pltfrm: na
 ms.workload: identity
 ms.subservice: pim
-ms.date: 09/14/2021
-ms.author: curtand
+ms.date: 06/24/2022
+ms.author: mtillman
+ms.reviewer: shaunliu
 ms.custom: pim
 ms.collection: M365-identity-device-management
 ---
 
 # Configure Azure resource role settings in Privileged Identity Management
 
-When you configure Azure resource role settings, you define the default settings that are applied to Azure resource role assignments in Azure Active Directory (Azure AD) Privileged Identity Management (PIM). Use the following procedures to configure the approval workflow and specify who can approve or deny requests.
+When you configure Azure resource role settings, you define the default settings that are applied to Azure role assignments in Privileged Identity Management (PIM) in Azure Active Directory (Azure AD), part of Microsoft Entra. Use the following procedures to configure the approval workflow and specify who can approve or deny requests.
 
 ## Open role settings
 
@@ -94,7 +94,7 @@ Privileged Identity Management provides optional enforcement of Azure AD Multi-F
 
 ### On active assignment
 
-This option requires admins must complete a multifactor authentication before creating an active (as opposed to eligible) role assignment. Privileged Identity Management can't enforce multifactor authentication when the user uses their role assignment because they are already active in the role from the time that it is assigned.
+This option requires admins must complete a multifactor authentication before creating an active (as opposed to eligible) role assignment. Privileged Identity Management can't enforce multifactor authentication when the user activates their role assignment because the user is already active in the role from the time that it is assigned.
 
 To require multifactor authentication when creating an active role assignment, you can enforce multifactor authentication on active assignment by checking the **Require Multi-Factor Authentication on active assignment** box.
 
@@ -108,7 +108,7 @@ For more information, see [Multifactor authentication and Privileged Identity Ma
 
 ## Activation maximum duration
 
-Use the **Activation maximum duration** slider to set the maximum time, in hours, that a role stays active before it expires. This value can be from one to 24 hours.
+Use the **Activation maximum duration** slider to set the maximum time, in hours, that an activation request for a role assignment remains active before it expires. This value can be from one to 24 hours.
 
 ## Require justification
 

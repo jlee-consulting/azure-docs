@@ -1,12 +1,13 @@
 ---
 title: How to configure the Azure Cosmos DB integrated cache
 description: Learn how to configure the Azure Cosmos DB integrated cache
-author: timsander1
+author: seesharprun
 ms.service: cosmos-db
 ms.subservice: cosmosdb-sql
 ms.topic: conceptual
-ms.date: 09/20/2021
-ms.author: tisande
+ms.date: 09/28/2021
+ms.author: sidandrews
+ms.reviewer: jucocchi
 ---
 
 # How to configure the Azure Cosmos DB integrated cache (Preview)
@@ -61,7 +62,7 @@ If you're using the Java SDK, you must also manually set [contentResponseOnWrite
 
 ## Adjust request consistency
 
-You must adjust the request consistency to eventual. If not, the request will always bypass the integrated cache. The easiest way to configure eventual consistency for all read operations is to [set it at the account-level](consistency-levels.md#configure-the-default-consistency-level). You can also configure consistency at the [request-level](how-to-manage-consistency.md#override-the-default-consistency-level), which is recommended if you only want a subset of your reads to utilize the integrated cache.
+You must adjust the request consistency to session or eventual. If not, the request will always bypass the integrated cache. The easiest way to configure a specific consistency for all read operations is to [set it at the account-level](consistency-levels.md#configure-the-default-consistency-level). You can also configure consistency at the [request-level](how-to-manage-consistency.md#override-the-default-consistency-level), which is recommended if you only want a subset of your reads to utilize the integrated cache.
 
 > [!NOTE]
 > If you are using the Python SDK, you **must** explicitly set the consistency level for each request. The default account-level setting will not automatically apply.

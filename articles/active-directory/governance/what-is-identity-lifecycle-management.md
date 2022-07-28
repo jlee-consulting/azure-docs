@@ -3,7 +3,7 @@ title: 'What is identity lifecycle management with Azure Active Directory? | Mic
 description: Describes overview of identity lifecycle management.
 services: active-directory
 author: billmath
-manager: daveba
+manager: karenhoran
 ms.service: active-directory
 ms.workload: identity
 ms.topic: overview
@@ -35,19 +35,19 @@ The typical process for establishing identity lifecycle management in an organiz
 
 2. Connect those systems of record with one or more directories and databases used by applications, and resolve any inconsistencies between the directories and the systems of record. For example, a directory may have obsolete data, such as an account for a former employee, that is no longer needed. 
 
-3. Determine what processes can be used to supply authoritative information in the absence of a system of record.  For example, if there are digital identities but visitors, but the organization has no database for visitors, then it may be necessary to find an alternate way to determine when an digital identity for a visitor is no longer needed.
+3. Determine what processes can be used to supply authoritative information in the absence of a system of record.  For example, if there are digital identities for visitors, but the organization has no database for visitors, then it may be necessary to find an alternate way to determine when an digital identity for a visitor is no longer needed.
 
-4. Configure that changes from the system of record or other processes are replicated to each of the directories or databases that require an update.
+4. Ensure that changes from the system of record or other processes are replicated to each of the directories or databases that require an update.
 
 ## Identity lifecycle management for representing employees and other individuals with an organizational relationship
 
 When planning identity lifecycle management for employees, or other individuals with an organizational relationship such as a contractor or student, many organizations model the "join, move, and leave" process.  These are:
-	
+   
    - Join - when an individual comes into scope of needing access, an identity is needed by those applications, so a new digital identity may need to be created if one is not already available
-   - Move - when an individual moves between boundaries, that require additional access authorizations to be added or removed to their digital identity
-   - Leave- when an individual leaves the scope of needing access, access may need to be removed, and subsequently the identity may no longer by required by applications other than for audit or forensics purposes
+   - Move - when an individual moves between boundaries that require additional access authorizations to be added or removed to their digital identity
+   - Leave- when an individual leaves the scope of needing access, access may need to be removed, and subsequently the identity may no longer be required by applications other than for audit or forensics purposes
 
-So for example, if a new employee joins your organization, who has never been affiliated with your organization before, that employee will require a new digital identity, represented as a user account in Azure AD.  The creation of this account would fall into a "Joiner" process, which could be automated if there was a system of record such as Workday that could indicate when the new employee starts work.  Later, if your organization has an employee move from say, Sales to Marketing, they would fall into a "Mover" process.  This would require removing the access rights they had in the Sales organization which they no longer require, and granting them rights in the Marketing organization that they new require.
+So for example, if a new employee joins your organization and that employee has never been affiliated with your organization before, that employee will require a new digital identity, represented as a user account in Azure AD.  The creation of this account would fall into a "Joiner" process, which could be automated if there was a system of record such as Workday that could indicate when the new employee starts work.  Later, if your organization has an employee move from say, Sales to Marketing, they would fall into a "Mover" process.  This would require removing the access rights they had in the Sales organization which they no longer require, and granting them rights in the Marketing organization that they new require.
 
 ## Identity lifecycle management for guests
 
@@ -57,15 +57,15 @@ Similar processes are also needed for guests and other users.  Azure AD entitlem
 
 Azure AD currently provides these features:
 
-* Users representing employees can be automatically created and updated in Azure AD and Active Directory using [HR-driven provisioning](what-is-hr-driven-provisioning.md)
-* Users already present in Active Directory can be automatically created and maintained in Azure AD using [inter-directory provisioning](what-is-inter-directory-provisioning.md)
+* Users representing employees can be automatically created and updated in Azure AD and Active Directory using [HR-driven provisioning](../app-provisioning/what-is-hr-driven-provisioning.md)
+* Users already present in Active Directory can be automatically created and maintained in Azure AD using [inter-directory provisioning](../hybrid/what-is-inter-directory-provisioning.md)
 * Users can be automatically assigned to groups based on their properties, using [dynamic groups](../external-identities/use-dynamic-groups.md#what-are-dynamic-groups) and can, upon request, be assigned to groups, Teams, Azure AD roles, Azure resource roles, and SharePoint Online sites, using [entitlement management](entitlement-management-scenarios.md) and [Privileged Identity Management](../privileged-identity-management/pim-configure.md)
-* Updates to users can be automatically sent to more applications using [app provisioning](what-is-app-provisioning.md)
+* Updates to users can be automatically sent to more applications using [app provisioning](../app-provisioning/user-provisioning.md)
 
 ## Next steps 
 
 - [What is provisioning?](what-is-provisioning.md)
 - [Govern access for external users in Azure AD entitlement management](./entitlement-management-external-users.md)
-- [What is HR driven provisioning?](what-is-hr-driven-provisioning.md)
-- [What is app provisioning?](what-is-app-provisioning.md)
-- [What is inter-directory provisioning?](what-is-inter-directory-provisioning.md)
+- [What is HR driven provisioning?](../app-provisioning/what-is-hr-driven-provisioning.md)
+- [What is app provisioning?](../app-provisioning/user-provisioning.md)
+- [What is inter-directory provisioning?](../hybrid/what-is-inter-directory-provisioning.md)

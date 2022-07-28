@@ -1,9 +1,8 @@
 ---
-title: Acquire a token to call a web API using username password (desktop app) | Azure
-titleSuffix: Microsoft identity platform
-description: Learn how to build a desktop app that calls web APIs to acquire a token for the app using username password
+title: Acquire a token to call a web API using username and password (desktop app)
+description: Learn how to build a desktop app that calls web APIs to acquire a token for the app using username and password.
 services: active-directory
-author: maliksahil
+author: Dickson-Mwendia
 manager: CelesteDG
 
 ms.service: active-directory
@@ -11,7 +10,7 @@ ms.subservice: develop
 ms.topic: conceptual
 ms.workload: identity
 ms.date: 08/25/2021
-ms.author: sahmalik
+ms.author: dmwendia
 ms.custom: aaddev, devx-track-python
 #Customer intent: As an application developer, I want to know how to write a desktop app that calls web APIs by using the Microsoft identity platform.
 ---
@@ -22,7 +21,7 @@ You can also acquire a token by providing the username and password. This flow i
 
 ## This flow isn't recommended
 
-The username and password flow is *not recommended* because having your application ask a user for their password isn't secure. For more information, see [What's the solution to the growing problem of passwords?](https://news.microsoft.com/features/whats-solution-growing-problem-passwords-says-microsoft/) The preferred flow for acquiring a token silently on Windows domain joined machines is [Integrated Windows Authentication](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/Integrated-Windows-Authentication). You can also use [device code flow](https://aka.ms/msal-net-device-code-flow).
+The username and password flow is *not recommended* because having your application ask a user for their password isn't secure. For more information, see [What's the solution to the growing problem of passwords?](https://news.microsoft.com/features/whats-solution-growing-problem-passwords-says-microsoft/) The preferred flow for acquiring a token silently on Windows domain joined machines is [integrated Windows authentication](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/Integrated-Windows-Authentication). You can also use [device code flow](https://aka.ms/msal-net-device-code-flow).
 
 Using a username and password is useful in some cases, such as DevOps scenarios. But if you want to use a username and password in interactive scenarios where you provide your own UI, think about how to move away from it. By using a username and password, you're giving up a number of things:
 

@@ -8,21 +8,22 @@ ms.devlang: python
 ms.topic: quickstart
 ms.date: 08/26/2021
 ms.author: rosouz
-ms.custom: [seodec18, seo-javascript-september2019, seo-python-october2019, devx-track-python]
+ms.custom: seodec18, seo-javascript-september2019, seo-python-october2019, devx-track-python, mode-api
 ---
 
 # Quickstart: Build a Python application using an Azure Cosmos DB SQL API account
 [!INCLUDE[appliesto-sql-api](../includes/appliesto-sql-api.md)]
 
 > [!div class="op_single_selector"]
-> * [.NET V3](create-sql-api-dotnet.md)
-> * [.NET V4](create-sql-api-dotnet-V4.md)
-> * [Java SDK v4](create-sql-api-java.md)
-> * [Spring Data v3](create-sql-api-spring-data.md)
-> * [Spark v3 connector](create-sql-api-spark.md)
+>
+> * [.NET](quickstart-dotnet.md)
 > * [Node.js](create-sql-api-nodejs.md)
+> * [Java](create-sql-api-java.md)
+> * [Spring Data](create-sql-api-spring-data.md)
 > * [Python](create-sql-api-python.md)
-> * [Xamarin](create-sql-api-xamarin-dotnet.md)
+> * [Spark v3](create-sql-api-spark.md)
+> * [Go](create-sql-api-go.md)
+>
 
 In this quickstart, you create and manage an Azure Cosmos DB SQL API account from the Azure portal, and from Visual Studio Code with a Python app cloned from GitHub. Azure Cosmos DB is a multi-model database service that lets you quickly create and query document, table, key-value, and graph databases with global distribution and horizontal scale capabilities.
 
@@ -34,13 +35,17 @@ In this quickstart, you create and manage an Azure Cosmos DB SQL API account fro
         * [Visual Studio Monthly Credits](https://azure.microsoft.com/pricing/member-offers/credit-for-visual-studio-subscribers)
         * [Azure Cosmos DB Free Tier](../optimize-dev-test.md#azure-cosmos-db-free-tier)
     * Without an Azure active subscription:
-        * [Try Azure Cosmos DB for free](https://azure.microsoft.com/try/cosmosdb/), a tests environment that lasts for 30 days.
+        * [Try Azure Cosmos DB for free](../try-free.md), a tests environment that lasts for 30 days.
         * [Azure Cosmos DB Emulator](https://aka.ms/cosmosdb-emulator) 
 - [Python 2.7 or 3.6+](https://www.python.org/downloads/), with the `python` executable in your `PATH`.
 - [Visual Studio Code](https://code.visualstudio.com/).
 - The [Python extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-python.python#overview).
 - [Git](https://www.git-scm.com/downloads). 
 - [Azure Cosmos DB SQL API SDK for Python](https://github.com/Azure/azure-sdk-for-python/tree/master/sdk/cosmos/azure-cosmos)
+
+## Important update on Python 2.x Support
+
+New releases of this SDK won't support Python 2.x starting January 1st, 2022. Please check the [CHANGELOG](./sql-api-sdk-python.md) for more information.
 
 ## Create a database account
 
@@ -65,8 +70,9 @@ Now let's clone a SQL API app from GitHub, set the connection string, and run it
 1. Open a command prompt, create a new folder named git-samples, then close the command prompt.
 
     ```cmd
-    md "git-samples"
+    md git-samples
     ```
+
    If you are using a bash prompt, you should instead use the following command:
 
    ```bash
@@ -109,7 +115,7 @@ Now go back to the Azure portal to get your connection string information and co
 
 This step is optional. Learn about the database resources created in code, or skip ahead to [Update your connection string](#update-your-connection-string).
 
-The following snippets are all taken from the *cosmos_get_started.py* file.
+The following snippets are all taken from the [cosmos_get_started.py](https://github.com/Azure-Samples/azure-cosmos-db-python-getting-started/blob/main/cosmos_get_started.py) file.
 
 * The CosmosClient is initialized. Make sure to update the "endpoint" and "key" values as described in the [Update your connection string](#update-your-connection-string) section. 
 

@@ -5,15 +5,17 @@ description: Turn your machine learning experimental notebooks into production-r
 author: bjcmit
 ms.author: brysmith
 ms.service: machine-learning
-ms.subservice: core
+ms.subservice: mlops
 ms.topic: tutorial
-ms.date: 04/30/2020
-ms.custom: devx-track-python
+ms.date: 10/21/2021
+ms.custom: devx-track-python, sdkv1, event-tier1-build-2022
 ---
 
 # Tutorial: Convert ML experiments to production Python code
 
-In this tutorial, you learn how to convert Juptyer notebooks into Python scripts to make it testing and automation friendly using the MLOpsPython code template and Azure Machine Learning. Typically, this process is used to take experimentation / training code from a Juptyer notebook and convert it into Python scripts. Those scripts can then be used testing and CI/CD automation in your production environment. 
+[!INCLUDE [sdk v1](../../includes/machine-learning-sdk-v1.md)]
+
+In this tutorial, you learn how to convert Jupyter notebooks into Python scripts to make it testing and automation friendly using the MLOpsPython code template and Azure Machine Learning. Typically, this process is used to take experimentation / training code from a Jupyter notebook and convert it into Python scripts. Those scripts can then be used testing and CI/CD automation in your production environment. 
 
 A machine learning project requires experimentation where hypotheses are tested with agile tools like Jupyter Notebook using real datasets. Once the model is ready for production, the model code should be placed in a production code repository. In some cases, the model code must be converted to Python scripts to be placed in the production code repository. This tutorial covers a recommended approach on how to export experimentation code to Python scripts.
 
@@ -430,7 +432,7 @@ if __name__ == '__main__':
 `train.py` can now be invoked from a terminal by running `python train.py`.
 The functions from `train.py` can also be called from other files.
 
-The `train_aml.py` file found in the `diabetes_regression/training` directory in the MLOpsPython repository calls the functions defined in `train.py` in the context of an Azure Machine Learning experiment run. The functions can also be called in unit tests, covered later in this guide.
+The `train_aml.py` file found in the `diabetes_regression/training` directory in the MLOpsPython repository calls the functions defined in `train.py` in the context of an Azure Machine Learning experiment job. The functions can also be called in unit tests, covered later in this guide.
 
 ### Create Python file for the Diabetes Ridge Regression Scoring notebook
 
@@ -523,5 +525,5 @@ def test_train_model():
 Now that you understand how to convert from an experiment to production code, see the following links for more information and next steps:
 
 + [MLOpsPython](https://github.com/microsoft/MLOpsPython/blob/master/docs/custom_model.md): Build a CI/CD pipeline to train, evaluate and deploy your own model using Azure Pipelines and Azure Machine Learning
-+ [Monitor Azure ML experiment runs and metrics](./how-to-log-view-metrics.md)
++ [Monitor Azure ML experiment jobs and metrics](./how-to-log-view-metrics.md)
 + [Monitor and collect data from ML web service endpoints](./how-to-enable-app-insights.md)

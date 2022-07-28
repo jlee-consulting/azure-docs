@@ -7,7 +7,8 @@ ms.topic: how-to
 ms.date: 10/15/2020
 author: manishmsfte
 ms.author: mansha
-ms.custom: devx-track-js, devx-track-azurecli, devx-track-csharp
+ms.devlang: csharp
+ms.custom: devx-track-azurecli, devx-track-csharp
 ---
 
 # Provision database, container or autoscale throughput on Azure Cosmos DB Gremlin API resources
@@ -21,7 +22,7 @@ If you are using a different API, see [SQL API](../how-to-provision-container-th
 
 1. Sign in to the [Azure portal](https://portal.azure.com/).
 
-1. [Create a new Azure Cosmos account](../mongodb/create-mongodb-dotnet.md#create-a-database-account), or select an existing Azure Cosmos account.
+1. [Create a new Azure Cosmos account](../mongodb/create-mongodb-dotnet.md#create-an-azure-cosmos-db-account), or select an existing Azure Cosmos account.
 
 1. Open the **Data Explorer** pane, and select **New Graph**. Next, provide the following details:
 

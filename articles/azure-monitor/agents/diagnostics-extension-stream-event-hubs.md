@@ -4,7 +4,7 @@ description: Configure diagnostics extension in Azure Monitor to send data to Az
 ms.topic: conceptual
 author: bwren
 ms.author: bwren
-ms.date: 02/18/2020
+ms.date: 07/12/2022
 
 ---
 
@@ -160,7 +160,7 @@ In the following example, the **sinks** attribute is applied directly to three c
 ```
 
 ## Validating configuration
-You can use a variety of methods to validate that data is being sent to the event hub. ne straightforward method is to use Event Hubs capture as described in [Capture events through Azure Event Hubs in Azure Blob Storage or Azure Data Lake Storage](../../event-hubs/event-hubs-capture-overview.md). 
+You can use a variety of methods to validate that data is being sent to the event hub. One straightforward method is to use Event Hubs capture as described in [Capture events through Azure Event Hubs in Azure Blob Storage or Azure Data Lake Storage](../../event-hubs/event-hubs-capture-overview.md). 
 
 
 ## Troubleshoot Event Hubs sinks

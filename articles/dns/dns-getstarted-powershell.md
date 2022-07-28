@@ -5,12 +5,10 @@ description: Learn how to create a DNS zone and record in Azure DNS. This is a s
 services: dns
 author: rohinkoul
 ms.author: rohink
-ms.date: 04/23/2021
+ms.date: 07/21/2022
 ms.topic: quickstart
 ms.service: dns
-ms.custom: devx-track-azurepowershell
-  - devx-track-azurepowershell
-  - mode-api
+ms.custom: devx-track-azurepowershell, mode-api
 #Customer intent: As an administrator or developer, I want to learn how to configure Azure DNS using Azure PowerShell so I can use Azure DNS for my name resolution.
 ---
 

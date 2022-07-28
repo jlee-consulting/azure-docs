@@ -1,12 +1,13 @@
 ---
 title: Azure Cosmos DB integrated cache
 description: The Azure Cosmos DB integrated cache is an in-memory cache that helps you ensure manageable costs and low latency as your request volume grows.
-author: timsander1
+author: seesharprun
 ms.service: cosmos-db
 ms.subservice: cosmosdb-sql
 ms.topic: conceptual
-ms.date: 09/20/2021
-ms.author: tisande
+ms.date: 09/28/2021
+ms.author: sidandrews
+ms.reviewer: jucocchi
 ---
 
 # Azure Cosmos DB integrated cache - Overview (Preview)
@@ -86,7 +87,7 @@ The query cache will automatically cache query continuation tokens, where applic
 
 The integrated cache supports both session and eventual [consistency](consistency-levels.md) only. If a read has consistent prefix, bounded staleness, or strong consistency, it will always bypass the integrated cache.
 
-The easiest way to configure either session or eventual consistency for all reads is to [set it at the account-level](consistency-levels.md#configure-the-default-consistency-level). However, if you would only like some of your reads to have eventual consistency, you can also configure consistency at the [request-level](how-to-manage-consistency.md#override-the-default-consistency-level).
+The easiest way to configure either session or eventual consistency for all reads is to [set it at the account-level](consistency-levels.md#configure-the-default-consistency-level). However, if you would only like some of your reads to have a specific consistency, you can also configure consistency at the [request-level](how-to-manage-consistency.md#override-the-default-consistency-level).
 
 ### Session consistency
 
@@ -135,8 +136,8 @@ When using the integrated cache, it is helpful to monitor some key metrics. The 
 - `IntegratedCacheEvictedEntriesSize` – The average amount of data evicted due to LRU from the integrated cache across dedicated gateway nodes. This value does not include data that expired due to exceeding the `MaxIntegratedCacheStaleness` time.
 - `IntegratedCacheItemExpirationCount` - The number of items that are evicted from the integrated cache due to cached point reads exceeding the `MaxIntegratedCacheStaleness` time. This value is an average of integrated cache instances across all dedicated gateway nodes.
 - `IntegratedCacheQueryExpirationCount` - The  number of queries that are evicted from the integrated cache due to cached queries exceeding the `MaxIntegratedCacheStaleness` time. This value is an average of integrated cache instances across all dedicated gateway nodes.
-- `IntegratedCacheItemHitRate` – The proportion of point reads that used the integrated cache (out of all point reads routed through the dedicated gateway with eventual consistency). This value is an average of integrated cache instances across all dedicated gateway nodes.
-- `IntegratedCacheQueryHitRate` – The proportion of queries that used the integrated cache (out of all queries routed through the dedicated gateway with eventual consistency). This value is an average of integrated cache instances across all dedicated gateway nodes.
+- `IntegratedCacheItemHitRate` – The proportion of point reads that used the integrated cache (out of all point reads routed through the dedicated gateway with session or eventual consistency). This value is an average of integrated cache instances across all dedicated gateway nodes.
+- `IntegratedCacheQueryHitRate` – The proportion of queries that used the integrated cache (out of all queries routed through the dedicated gateway with session or eventual consistency). This value is an average of integrated cache instances across all dedicated gateway nodes.
 
 All existing metrics are available, by default, from the **Metrics** blade (not Metrics classic):
 

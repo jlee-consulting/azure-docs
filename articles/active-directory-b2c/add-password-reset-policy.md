@@ -3,15 +3,15 @@ title: Set up a password reset flow
 titleSuffix: Azure AD B2C
 description: Learn how to set up a password reset flow in Azure Active Directory B2C (Azure AD B2C).
 services: active-directory-b2c
-author: msmimart
-manager: celestedg
+author: kengaderdus
+manager: CelesteDG
 
 ms.service: active-directory
 ms.workload: identity
 ms.topic: how-to
 ms.date: 08/24/2021
 ms.custom: project-no-code
-ms.author: mimart
+ms.author: kengaderdus
 ms.subservice: B2C
 zone_pivot_groups: b2c-policy-type
 ---
@@ -130,7 +130,8 @@ Declare your claims in the [claims schema](claimsschema.md). Open the extensions
     </BuildingBlocks> -->
     ```
 
-A claims transformation technical profile initiates the **isForgotPassword** claim. The technical profile is referenced later. When invoked, it sets the value of the **isForgotPassword** claim to `true`. Find the **ClaimsProviders** element. If the element doesn't exist, add it. Then add the following claims provider:  
+### Add the technical profiles
+A claims transformation technical profile accesses the `isForgotPassword` claim. The technical profile is referenced later. When it's invoked, it sets the value of the `isForgotPassword` claim to `true`. Find the **ClaimsProviders** element (if the element doesn't exist, create it), and then add the following claims provider:
 
 ```xml
 <!-- 
@@ -144,11 +145,15 @@ A claims transformation technical profile initiates the **isForgotPassword** cla
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="isForgotPassword" DefaultValue="true" AlwaysUseDefaultValue="true"/>
         </OutputClaims>
+        <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
       </TechnicalProfile>
       <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
         <Metadata>
           <Item Key="setting.forgotPasswordLinkOverride">ForgotPasswordExchange</Item>
         </Metadata>
+      </TechnicalProfile>
+      <TechnicalProfile Id="LocalAccountWritePasswordUsingObjectId">
+        <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
       </TechnicalProfile>
     </TechnicalProfiles>
   </ClaimsProvider>
@@ -157,6 +162,8 @@ A claims transformation technical profile initiates the **isForgotPassword** cla
 ```
 
 The **SelfAsserted-LocalAccountSignin-Email** technical profile **setting.forgotPasswordLinkOverride** defines the password reset claims exchange that executes in your user journey.
+
+The **LocalAccountWritePasswordUsingObjectId** technical profile **UseTechnicalProfileForSessionManagement** `SM-AAD` session manager is required for the user to preform subsequent logins successfully under [SSO](./custom-policy-reference-sso.md) conditions.
 
 ### Add the password reset sub journey
 
@@ -331,10 +338,15 @@ To test the user flow:
 
 ### Create a password reset policy
 
-Custom policies are a set of XML files that you upload to your Azure AD B2C tenant to define user journeys. We provide starter packs that have several pre-built policies, including sign-up and sign-in, password reset, and profile editing policies. For more information, see [Get started with custom policies in Azure AD B2C](tutorial-create-user-flows.md?pivots=b2c-custom-policy).
+Custom policies are a set of XML files that you upload to your Azure AD B2C tenant to define user journeys. We provide [starter packs](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack) that have several pre-built policies, including sign up and sign in, password reset, and profile editing policies. For more information, see [Get started with custom policies in Azure AD B2C](tutorial-create-user-flows.md?pivots=b2c-custom-policy).
 
 ::: zone-end
+
+## Troubleshoot Azure AD B2C user flows and custom policies
+Your application needs to handle certain errors coming from Azure B2C service. Learn [how to troubleshoot Azure AD B2C's user flows and custom policies](troubleshoot.md).
 
 ## Next steps
 
 Set up a [force password reset](force-password-reset.md).
+
+[Sign-up and Sign-in with embedded password reset](https://github.com/azure-ad-b2c/samples/tree/master/policies/embedded-password-reset).

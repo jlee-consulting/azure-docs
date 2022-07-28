@@ -3,11 +3,12 @@ title: 'Migrate your data to a Cassandra API account in Azure Cosmos DB- Tutoria
 description: In this tutorial, learn how to copy data from Apache Cassandra to a Cassandra API account in Azure Cosmos DB.
 author: TheovanKraay
 ms.author: thvankra
-ms.reviewer: sngun
+ms.reviewer: mjbrown
 ms.service: cosmos-db
 ms.subservice: cosmosdb-cassandra
 ms.topic: tutorial
 ms.date: 12/03/2018
+ms.devlang: csharp
 ms.custom: seodec18
 #Customer intent: As a developer, I want to migrate my existing Cassandra workloads to Azure Cosmos DB so that the overhead to manage resources, clusters, and garbage collection is automatically handled by Azure Cosmos DB.
 ---
@@ -73,6 +74,9 @@ You can move data from existing Cassandra workloads to Azure Cosmos DB by using 
 
 Use the [CQL COPY command](https://cassandra.apache.org/doc/latest/cassandra/tools/cqlsh.html#cqlshrc) to copy local data to the Cassandra API account in Azure Cosmos DB.
 
+> [!WARNING]
+> Only use the CQL COPY to migrate small datasets. To move large datasets, [migrate data by using Spark](#migrate-data-by-using-spark).
+
 1. To be certain that your csv file contains the correct file structure, use the `COPY TO` command to export data directly from your source Cassandra table to a csv file (ensure that cqlsh is connected to the source table using the appropriate credentials):
 
    ```bash
@@ -92,7 +96,38 @@ Use the [CQL COPY command](https://cassandra.apache.org/doc/latest/cassandra/too
    ```bash
    COPY exampleks.tablename FROM 'data.csv' WITH HEADER = TRUE;
    ```
+> [!NOTE]
+> Cassandra API supports protocol version 4, which shipped with Cassandra 3.11. There may be issues with using later protocol versions with our API. COPY FROM with later protocol version can go into a loop and return duplicate rows. 
+> Add the protocol-version to the cqlsh command.
+```sql
+cqlsh <USERNAME>.cassandra.cosmos.azure.com 10350 -u <USERNAME> -p <PASSWORD> --ssl --protocol-version=4
+```
+##### Add throughput-limiting options to CQL Copy command
 
+The COPY command in cqlsh supports various parameters to control the rate of ingestion of documents into Azure Cosmos DB.
+
+The default configuration for COPY command tries to ingest data at very fast pace and does not account for the rate-limiting behavior of CosmosDB. You should reduce the CHUNKSIZE or INGESTRATE depending on the throughput configured on the collection.
+
+We recommend the below configuration (at minimum) for a collection at 20,000 RUs if the document or record size is 1 KB.
+
+- CHUNKSIZE = 100
+- INGESTRATE = 500
+- MAXATTEMPTS = 10
+
+###### Example commands
+
+- Copying data from Cassandra API to local csv file
+```sql
+COPY standard1 (key, "C0", "C1", "C2", "C3", "C4") TO 'backup.csv' WITH PAGESIZE=100 AND MAXREQUESTS=1 ;
+```
+
+- Copying data from local csv file to Cassandra API
+```sql
+COPY standard2 (key, "C0", "C1", "C2", "C3", "C4") FROM 'backup.csv' WITH CHUNKSIZE=100 AND INGESTRATE=100 AND MAXATTEMPTS=10;
+```
+
+>[!IMPORTANT]
+> Only the open-source Apache Cassandra version of CQLSH COPY is supported. Datastax Enterprise (DSE) versions of CQLSH may encounter errors. 
 
 
 ### Migrate data by using Spark 
@@ -104,6 +139,10 @@ Use the following steps to migrate data to the Cassandra API account with Spark:
 1. Move data to the destination Cassandra API endpoint. Refer to this [how-to guide](migrate-data-databricks.md) for migration with Azure Databricks.
 
 Migrating data by using Spark jobs is a recommended option if you have data residing in an existing cluster in Azure virtual machines or any other cloud. To do this, you must set up Spark as an intermediary for one-time or regular ingestion. You can accelerate this migration by using Azure ExpressRoute connectivity between your on-premises environment and Azure. 
+
+### Live migration
+
+Where a zero-downtime migration from a native Apache Cassandra cluster is required, we recommend configuring dual-writes, and a separate bulk data load to migrate historical data. We've made implementing this pattern more straightforward by providing an open-source [dual-write proxy](https://github.com/Azure-Samples/cassandra-proxy) to allow for minimal application code changes. Take a look at our how-to article on [live migration using dual-write proxy and Apache Spark](migrate-data-dual-write-proxy.md) for more detail on implementing this pattern. 
 
 ## Clean up resources
 

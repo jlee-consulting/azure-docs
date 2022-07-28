@@ -1,9 +1,8 @@
 ---
 title: Configure a solution template plan
 description: Configure a solution template plan for your Azure application offer in Partner Center (Azure Marketplace). 
-author: aarathin
-ms.author: aarathin
-ms.reviewer: dannyevers
+author: macerru
+ms.author: macerr
 ms.service: marketplace 
 ms.subservice: partnercenter-marketplace-publisher
 ms.topic: how-to

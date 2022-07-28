@@ -2,7 +2,8 @@
 title: Overview of features - Azure Event Hubs | Microsoft Docs
 description: This article provides details about features and terminology of Azure Event Hubs. 
 ms.topic: overview
-ms.date: 08/27/2021
+ms.custom: event-tier1-build-2022
+ms.date: 05/11/2022
 ---
 
 # Features and terminology in Azure Event Hubs
@@ -54,7 +55,7 @@ Published events are removed from an event hub based on a configurable, timed-ba
 Event Hubs retains events for a configured retention time that applies across
 all partitions. Events are automatically removed when the retention period has
 been reached. If you specify a retention period of one day, the event will
-become unavailable exactly 24 hours after it has been accepted. You cannot
+become unavailable exactly 24 hours after it has been accepted. You can't
 explicitly delete events. 
 
 If you need to archive events beyond the allowed
@@ -81,8 +82,7 @@ lakes or long-term archives for event sourcing.
 > The deeper the history of an event stream gets, the more you will need auxiliary indexes to find a particular historical slice of a given stream. Inspection of event payloads and indexing aren't within the feature scope of Event Hubs (or Apache Kafka). Databases and specialized analytics stores and engines such as [Azure Data Lake Store](../data-lake-store/data-lake-store-overview.md), [Azure Data Lake Analytics](../data-lake-analytics/data-lake-analytics-overview.md) and [Azure Synapse](../synapse-analytics/overview-what-is.md) are therefore far better suited for storing historic events.
 >
 > [Event Hubs Capture](event-hubs-capture-overview.md) integrates directly with Azure Blob Storage and Azure Data Lake Storage and, through that integration, also enables [flowing events directly into Azure Synapse](store-captured-data-data-warehouse.md).
->
-> If you want to use the [Event Sourcing](/azure/architecture/patterns/event-sourcing) pattern for your application, you should align your snapshot strategy with the retention limits of Event Hubs. Do not aim to rebuild materialized views from raw events starting at the beginning of time. You would surely come to regret such a strategy once your application is in production for a while and is well used, and your projection builder has to churn through years of change events while trying to catch up to the latest and ongoing changes. 
+
 
 
 ### Publisher policy
@@ -93,7 +93,7 @@ Event Hubs enables granular control over event publishers through *publisher pol
 //<my namespace>.servicebus.windows.net/<event hub name>/publishers/<my publisher name>
 ```
 
-You don't have to create publisher names ahead of time, but they must match the SAS token used when publishing an event, in order to ensure independent publisher identities. When using publisher policies, the **PartitionKey** value is set to the publisher name. To work properly, these values must match.
+You don't have to create publisher names ahead of time, but they must match the SAS token used when publishing an event, in order to ensure independent publisher identities. When you use publisher policies, the **PartitionKey** value needs to be set to the publisher name. To work properly, these values must match.
 
 ## Capture
 
@@ -105,17 +105,20 @@ The files produced by Event Hubs Capture have the following Avro schema:
 
 :::image type="content" source="./media/event-hubs-capture-overview/event-hubs-capture3.png" alt-text="Image showing the structure of captured data":::
 
+> [!NOTE]
+> When you use no code editor in the Azure portal, you can capture streaming data in Event Hubs in an Azure Data Lake Storage Gen2 account in the **Parquet** format. For more information, see [How to: capture data from Event Hubs in Parquet format](../stream-analytics/capture-event-hub-data-parquet.md?toc=%2Fazure%2Fevent-hubs%2Ftoc.json) and [Tutorial: capture Event Hubs data in Parquet format and analyze with Azure Synapse Analytics](../stream-analytics/event-hubs-parquet-capture-tutorial.md?toc=%2Fazure%2Fevent-hubs%2Ftoc.json).
+
 ## Partitions
 [!INCLUDE [event-hubs-partitions](./includes/event-hubs-partitions.md)]
 
 
 ## SAS tokens
 
-Event Hubs uses *Shared Access Signatures*, which are available at the namespace and event hub level. A SAS token is generated from a SAS key and is an SHA hash of a URL, encoded in a specific format. Using the name of the key (policy) and the token, Event Hubs can regenerate the hash and thus authenticate the sender. Normally, SAS tokens for event publishers are created with only **send** privileges on a specific event hub. This SAS token URL mechanism is the basis for publisher identification introduced in the publisher policy. For more information about working with SAS, see [Shared Access Signature Authentication with Service Bus](../service-bus-messaging/service-bus-sas.md).
+Event Hubs uses *Shared Access Signatures*, which are available at the namespace and event hub level. A SAS token is generated from a SAS key and is an SHA hash of a URL, encoded in a specific format. Event Hubs can regenerate the hash by using the name of the key (policy) and the token and thus authenticate the sender. Normally, SAS tokens for event publishers are created with only **send** privileges on a specific event hub. This SAS token URL mechanism is the basis for publisher identification introduced in the publisher policy. For more information about working with SAS, see [Shared Access Signature Authentication with Service Bus](../service-bus-messaging/service-bus-sas.md).
 
 ## Event consumers
 
-Any entity that reads event data from an event hub is an *event consumer*. All Event Hubs consumers connect via the AMQP 1.0 session and events are delivered through the session as they become available. The client does not need to poll for data availability.
+Any entity that reads event data from an event hub is an *event consumer*. All Event Hubs consumers connect via the AMQP 1.0 session and events are delivered through the session as they become available. The client doesn't need to poll for data availability.
 
 ### Consumer groups
 
@@ -136,7 +139,7 @@ The following examples show the consumer group URI convention:
 
 The following figure shows the Event Hubs stream processing architecture:
 
-![Event Hubs architecture](./media/event-hubs-about/event_hubs_architecture.svg)
+![Event Hubs architecture](./media/event-hubs-about/event_hubs_architecture.png)
 
 ### Stream offsets
 
@@ -185,6 +188,13 @@ Event data:
 * System properties
 
 It's your responsibility to manage the offset.
+
+## Application groups
+An application group is a collection of client applications that connect to an Event Hubs namespace sharing a unique identifying condition such as the security context - shared access policy or Azure Active Directory (Azure AD) application ID. 
+
+Azure Event Hubs enables you to define resource access policies such as throttling policies for a given application group and controls event streaming (publishing or consuming) between client applications and Event Hubs. 
+
+For more information, see [Resource governance for client applications with application groups](resource-governance-overview.md). 
 
 ## Next steps
 
