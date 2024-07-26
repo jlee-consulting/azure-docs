@@ -2,11 +2,11 @@
 title: Resource Manager template samples for agents
 description: Sample Azure Resource Manager templates to deploy and configure virtual machine agents in Azure Monitor.
 ms.topic: sample
-author: bwren
-ms.author: bwren
-ms.date: 04/26/2022
-ms.reviewer: shseth
-
+ms.custom: devx-track-arm-template
+author: guywi-ms
+ms.author: guywild
+ms.date: 07/19/2023
+ms.reviewer: jeffwo
 ---
 
 # Resource Manager template samples for agents in Azure Monitor
@@ -56,8 +56,8 @@ resource windowsAgent 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' 
     settings: {
       authentication: {
         managedIdentity: {
-          identifier-name: 'mi_res_id'
-          identifier-value: userAssignedManagedIdentity
+          'identifier-name': 'mi_res_id'
+          'identifier-value': userAssignedManagedIdentity
         }
       }
     }
@@ -231,8 +231,8 @@ resource linuxAgent 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = 
     settings: {
       authentication: {
         managedIdentity: {
-          identifier-name: 'mi_res_id'
-          identifier-value: userAssignedManagedIdentity
+          'identifier-name': 'mi_res_id'
+          'identifier-value': userAssignedManagedIdentity
         }
       }
     }
@@ -1068,9 +1068,6 @@ resource managedIdentity 'Microsoft.Compute/virtualMachines/extensions@2021-11-0
       },
       "workspaceResourceId": {
         "value": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourcegroups/my-resource-group/providers/microsoft.operationalinsights/workspaces/my-workspace"
-      },
-      "workspaceKey": {
-        "value": "Npl#3y4SmqG4R30ukKo3oxfixZ5axv1xocXgKR17kgVdtacU4cEf+SNr2TdHGVKTsZHZv3R8QKRXfh+ToVR9dA-="
       }
   }
 }
@@ -1452,7 +1449,7 @@ resource vmDiagnosticsSettings 'Microsoft.Compute/virtualMachines/extensions@202
 ## Next steps
 
 * [Learn more about Azure Monitor agent](./azure-monitor-agent-overview.md)
-* [Learn more about Data Collection rules and associations](./data-collection-rule-azure-monitor-agent.md)
+* [Learn more about Data Collection rules and associations](./azure-monitor-agent-data-collection.md)
 * [Get sample templates for Data Collection rules and associations](./resource-manager-data-collection-rules.md)
 * [Get other sample templates for Azure Monitor](../resource-manager-samples.md).
 * [Learn more about diagnostic extension](./diagnostics-extension-overview.md).

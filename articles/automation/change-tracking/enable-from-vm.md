@@ -3,7 +3,7 @@ title: Enable Azure Automation Change Tracking and Inventory from an Azure VM
 description: This article tells how to enable Change Tracking and Inventory from an Azure VM.
 services: automation
 ms.subservice: change-inventory-management
-ms.date: 10/14/2020
+ms.date: 07/22/2024
 ms.topic: conceptual
 ---
 
@@ -22,7 +22,7 @@ This article describes how you can use an Azure VM to enable [Change Tracking an
 
 ## Sign in to Azure
 
-Sign in to the Azure portal at https://portal.azure.com.
+Sign in to the [Azure portal](https://portal.azure.com).
 
 ## Enable Change Tracking and Inventory
 

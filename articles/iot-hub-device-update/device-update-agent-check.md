@@ -1,8 +1,8 @@
 ---
 title: Device Update for Azure IoT Hub agent check | Microsoft Docs
 description: Device Update for IoT Hub uses Agent Check to find and diagnose missing devices.
-author: lichris
-ms.author: lichris
+author: vimeht
+ms.author: vimeht
 ms.date: 10/31/2022
 ms.topic: how-to
 ms.service: iot-hub-device-update
@@ -33,7 +33,7 @@ An Azure CLI environment:
 
 * Use the Bash environment in [Azure Cloud Shell](../cloud-shell/quickstart.md).
 
-  [![Launch Cloud Shell in a new window](../../includes/media/cloud-shell-try-it/hdi-launch-cloud-shell.png)](https://shell.azure.com)
+  :::image type="icon" source="~/reusable-content/ce-skilling/azure/media/cloud-shell/launch-cloud-shell-button.png" alt-text="Button to launch the Azure Cloud Shell." border="false" link="https://shell.azure.com":::
 
 * Or, if you prefer to run CLI reference commands locally, [install the Azure CLI](/cli/azure/install-azure-cli)
 
@@ -69,7 +69,7 @@ The results of agent check can be found in the diagnostics tab of Device Update.
 
 # [Azure CLI](#tab/cli)
 
-Use [az iot du device health list](/cli/azure/iot/device-update/device/health#az-iot-du-device-health-list) to view the health of your devices.
+Use [az iot du device health list](/cli/azure/iot/du/device/health#az-iot-du-device-health-list) to view the health of your devices.
 
 The `device health list` command takes the following arguments:
 
@@ -101,7 +101,7 @@ Only one device sync operation may be active at a time for each Device Update in
 
 # [Azure CLI](#tab/cli)
 
-Use [az iot du device import](/cli/azure/iot/device-update/device#az-iot-du-device-import) to import devices and modules to the Device Update instance from a linked IoT hub.
+Use [az iot du device import](/cli/azure/iot/du/device#az-iot-du-device-import) to import devices and modules to the Device Update instance from a linked IoT hub.
 
 ```azurecli
 az iot du device import --account <Device Update account name> --instance <Device Update instance name>

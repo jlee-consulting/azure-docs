@@ -2,14 +2,10 @@
 title: Azure DDoS Protection features
 description: Learn Azure DDoS Protection features
 services: ddos-protection
-documentationcenter: na
 author: AbdullahBell
 ms.service: ddos-protection
 ms.topic: conceptual
-ms.tgt_pltfrm: na
-ms.custom: ignite-2022
-ms.workload: infrastructure-services
-ms.date: 10/12/2022
+ms.date: 07/17/2024
 ms.author: abell
 ---
 # Azure DDoS Protection features
@@ -24,11 +20,11 @@ Azure DDoS Protection monitors actual traffic utilization and constantly compare
 
 During mitigation, traffic sent to the protected resource is redirected by the DDoS protection service and several checks are performed, such as:
 
-- Ensure packets conform to internet specifications and are not malformed.
+- Ensure packets conform to internet specifications and aren't malformed.
 - Interact with the client to determine if the traffic is potentially a spoofed packet (e.g: SYN Auth or SYN Cookie or by dropping a packet for the source to retransmit it).
 - Rate-limit packets, if no other enforcement method can be performed.
 
-Azure DDoS Protection drops attack traffic and forwards the remaining traffic to its intended destination. Within a few minutes of attack detection, you are notified using Azure Monitor metrics. By configuring logging on DDoS Protection telemetry, you can write the logs to available options for future analysis. Metric data in Azure Monitor for DDoS Protection is retained for 30 days.
+Azure DDoS Protection drops attack traffic and forwards the remaining traffic to its intended destination. Within a few minutes of attack detection, you're notified using Azure Monitor metrics. By configuring logging on DDoS Protection telemetry, you can write the logs to available options for future analysis. Metric data in Azure Monitor for DDoS Protection is retained for 30 days.
 
 ## Adaptive real time tuning
 
@@ -54,6 +50,8 @@ DDoS Protection applies three auto-tuned mitigation policies (TCP SYN, TCP, and 
 
 The policy thresholds are auto-configured via machine learning-based network traffic profiling. DDoS mitigation occurs for an IP address under attack only when the policy threshold is exceeded.
 
+For more information, see [View and configure DDoS Protection telemetry](telemetry.md).
+
 ### Metric for an IP address under DDoS attack
 
 If the public IP address is under attack, the value for the metric **Under DDoS attack or not** changes to 1 as DDoS Protection performs mitigation on the attack traffic.
@@ -78,8 +76,8 @@ If you have DDoS Protection, make sure that it's enabled on the virtual network 
 
 Monitor your applications independently. Understand the normal behavior of an application. Prepare to act if the application is not behaving as expected during a DDoS attack.
 
-Learn how your services will respond to an attack by [testing through simulations](test-through-simulations.md).
+Learn how your services will respond to an attack by [testing through DDoS simulations](test-through-simulations.md).
 
 ## Next steps
 
-- Learn how to [create an Azure DDoS Protection plan](manage-ddos-protection.md).
+- Learn more about [reference architectures](ddos-protection-reference-architectures.md).

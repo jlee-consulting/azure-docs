@@ -4,8 +4,8 @@ description: Learn how to diagnose and fix slow requests when you use Azure Cosm
 author: ealsur
 ms.service: cosmos-db
 ms.subservice: nosql
-ms.custom: ignite-2022
-ms.date: 08/30/2022
+ms.custom: devx-track-dotnet
+ms.date: 07/10/2024
 ms.author: maquaran
 ms.topic: troubleshooting
 ms.reviewer: mjbrown
@@ -158,8 +158,7 @@ If it's still slow, different patterns point to different problems. The followin
 | Single to all | `StoreResult` contains `TransportException` | Points to [SNAT port exhaustion](troubleshoot-dotnet-sdk.md#snat), or a lack of resources on the machine to process the request in time. |
 | Single or small percentage (SLA isn't violated) | All | A single or small percentage of slow requests can be caused by several different transient problems, and should be expected. | 
 | All | All | A problem with the infrastructure or networking. |
-| SLA violated | Requests contain multiple failure error codes, like `410` and `IsValid is true`. | Points to a problem with the Azure Cosmos DB service. |
-| SLA violated | Requests contain multiple failure error codes, like `410` and `IsValid is false`. | Points to a problem with the machine. |
+| SLA violated | Requests contain multiple failure error codes, like `410` | Points to a problem with the Azure Cosmos DB service or the client machine. |
 | SLA violated | `StorePhysicalAddress` are the same, with no failure status code. | Likely a problem with Azure Cosmos DB. |
 | SLA violated | `StorePhysicalAddress` have the same partition ID, but different replica IDs, with no failure status code. | Likely a problem with Azure Cosmos DB. |
 | SLA violated | `StorePhysicalAddress` is random, with no failure status code. | Points to a problem with the machine. |
@@ -169,14 +168,14 @@ For multiple store results for a single request, be aware of the following:
 * Strong consistency and bounded staleness consistency always have at least two store results.
 * Check the status code of each `StoreResult`. The SDK retries automatically on multiple different [transient failures](troubleshoot-dotnet-sdk-request-timeout.md). The SDK is constantly improved to cover more scenarios. 
 
-### RntbdRequestStats 
+### RequestTimeline
 
 Show the time for the different stages of sending and receiving a request in the transport layer.
 
-* `ChannelAcquisitionStarted`: The time to get or create a new connection. You can create new connections for numerous different regions. For example, let's say that a connection was unexpectedly closed, or too many requests were getting sent through the existing connections. You create a new connection. 
-* *Pipelined time is large* might be caused by a large request.
-* *Transit time is large*, which leads to a networking problem. Compare this number to the `BELatencyInMs`. If `BELatencyInMs` is small, then the time was spent on the network, and not on the Azure Cosmos DB service.
-* *Received time is large* might be caused by a thread starvation problem. This is the time between having the response and returning the result.
+* `ChannelAcquisitionStarted`: The time to get or create a new connection. Connections can be created for numerous reasons such as: The previous connection was closed due to inactivity using [CosmosClientOptions.IdleTcpConnectionTimeout](sdk-connection-modes.md#volume-of-connections), the volume of concurrent requests exceeds the [CosmosClientOptions.MaxRequestsPerTcpConnection](sdk-connection-modes.md#volume-of-connections), the connection was closed due to a network error, or the application is not following the [Singleton pattern](#application-design) and new instances are constantly created. Once a connection is established, it is reused for subsequent requests, so this should not impact P99 latency unless the previously mentioned issues are happening.
+* `Pipelined`: The time spent writing the request into the TCP socket. Request can only be written on a TCP socket one at a time, a large value indicates a bottleneck on the TCP socket which is commonly associated with locked threads by the application code or large requests size.
+* `Transit time`: The time spent on the network after the request was written on the TCP socket. Compare this number to the `BELatencyInMs`. If `BELatencyInMs` is small, then the time was spent on the network, and not on the Azure Cosmos DB service. If the request failed with a timeout, it indicates how long the client waited without response, and the source is network latency.
+* `Received`: The time between the response was received and processed by the SDK. A large value is normally caused by a thread starvation or locked threads.
 
 ### ServiceEndpointStatistics
 

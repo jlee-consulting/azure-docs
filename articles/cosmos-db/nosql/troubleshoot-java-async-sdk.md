@@ -9,7 +9,7 @@ ms.reviewer: mjbrown
 ms.devlang: java
 ms.subservice: nosql
 ms.topic: troubleshooting
-ms.custom: devx-track-java
+ms.custom: devx-track-java, devx-track-extended-java
 ---
 
 # Troubleshoot issues when you use the Azure Cosmos DB Async Java SDK v2 with API for NoSQL accounts
@@ -19,6 +19,7 @@ ms.custom: devx-track-java
 > * [Java SDK v4](troubleshoot-java-sdk-v4.md)
 > * [Async Java SDK v2](troubleshoot-java-async-sdk.md)
 > * [.NET](troubleshoot-dotnet-sdk.md)
+> * [Python SDK](troubleshoot-python-sdk.md)
 > 
 
 > [!IMPORTANT]
@@ -188,7 +189,7 @@ This failure is a server-side failure. It indicates that you consumed your provi
 
 ### Failure connecting to Azure Cosmos DB Emulator
 
-The Azure Cosmos DB Emulator HTTPS certificate is self-signed. For the SDK to work with the emulator, import the emulator certificate to a Java TrustStore. For more information, see [Export Azure Cosmos DB Emulator certificates](../local-emulator-export-ssl-certificates.md).
+The Azure Cosmos DB Emulator HTTPS certificate is self-signed. For the SDK to work with the emulator, import the emulator certificate to a Java TrustStore. For more information, see [Export Azure Cosmos DB Emulator certificates](../emulator.md).
 
 ### Dependency Conflict Issues
 
@@ -277,7 +278,6 @@ The number of connections to the Azure Cosmos DB endpoint in the `ESTABLISHED` s
 
 Many connections to the Azure Cosmos DB endpoint might be in the `CLOSE_WAIT` state. There might be more than 1,000. A number that high indicates that connections are established and torn down quickly. This situation potentially causes problems. For more information, see the [Common issues and workarounds] section.
 
- <!--Anchors-->
 [Common issues and workarounds]: #common-issues-workarounds
 [Enable client SDK logging]: #enable-client-sice-logging
 [Connection limit on a host machine]: #connection-limit-on-host

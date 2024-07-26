@@ -2,7 +2,7 @@
 title: Enable VM extension using Azure PowerShell
 description: This article describes how to deploy virtual machine extensions to Azure Arc-enabled servers running in hybrid cloud environments using Azure PowerShell.
 ms.date: 03/30/2022
-ms.topic: conceptual 
+ms.topic: how-to 
 ms.custom: devx-track-azurepowershell
 ---
 
@@ -84,6 +84,27 @@ The following example enables the Key Vault VM extension on an Azure Arc-enabled
 
     # Start the deployment
     New-AzConnectedMachineExtension -ResourceGroupName $resourceGroup -Location $location -MachineName $machineName -Name "KeyVaultForWindows or KeyVaultforLinux" -Publisher "Microsoft.Azure.KeyVault" -ExtensionType "KeyVaultforWindows or KeyVaultforLinux" -Setting $settings
+```
+
+### Datadog VM extension
+
+The following example enables the Datadog VM extension on an Azure Arc-enabled server:
+
+```azurepowershell
+$resourceGroup = "resourceGroupName"
+$machineName = "machineName"
+$location = "machineRegion"
+$osType = "Windows" # change to Linux if appropriate
+$settings = @{
+    # change to your preferred Datadog site
+    site = "us3.datadoghq.com"
+}
+$protectedSettings = @{
+    # change to your Datadog API key
+    api_key = "APIKEY"
+}
+
+New-AzConnectedMachineExtension -ResourceGroupName $resourceGroup -Location $location -MachineName $machineName -Name "Datadog$($osType)Agent" -Publisher "Datadog.Agent" -ExtensionType "Datadog$($osType)Agent" -Setting $settings -ProtectedSetting $protectedSettings
 ```
 
 ## List extensions installed

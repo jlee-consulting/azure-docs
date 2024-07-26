@@ -13,7 +13,7 @@ ms.custom: include file
 | Resource | Basic | Standard | Premium |
 |---|---|---|---|
 | Included storage<sup>1</sup> (GiB) | 10 | 100 | 500 |
-| Storage limit (TiB) | 20| 20 | 20 |
+| Storage limit (TiB) | 40| 40 | 40 |
 | Maximum image layer size (GiB) | 200 | 200 | 200 |
 | Maximum manifest size (MiB) | 4 | 4 | 4 |
 | ReadOps per minute<sup>2, 3</sup> | 1,000 | 3,000 | 10,000 |
@@ -30,15 +30,17 @@ ms.custom: include file
 | Service endpoint VNet access | N/A | N/A | [Preview][vnet] |
 | &bull; Virtual network rules | N/A | N/A | 100 |
 | Customer-managed keys | N/A | N/A | [Supported][cmk] |
-| Repository-scoped permissions | N/A | N/A | [Preview][token]|
-| &bull; Tokens | N/A | N/A | 20,000 |
-| &bull; Scope maps | N/A | N/A | 20,000 |
-| &bull; Repositories per scope map<sup>5</sup> | N/A | N/A | 500 |
+| Repository-scoped permissions | [Supported][token] | [Supported][token] | [Supported][token]|
+| &bull; Tokens | 100 | 500 | 50,000 |
+| &bull; Scope maps | 100 | 500 | 50,000 |
+| &bull; Actions| 500 | 500 | 500 |
+| &bull; Repositories per scope map<sup>5</sup> | 500 | 500 | 500 |
+| Anonymous pull access | N/A | [Preview][anonymous-pull-access] | [Preview][anonymous-pull-access] |
 
 
 <sup>1</sup> Storage included in the daily rate for each tier. Additional storage may be used, up to the registry storage limit, at an additional daily rate per GiB. For rate information, see [Azure Container Registry pricing][pricing]. If you need storage beyond the registry storage limit, please contact Azure Support.
 
-<sup>2</sup>*ReadOps*, *WriteOps*, and *Bandwidth* are minimum estimates. Azure Container Registry strives to improve performance as usage requires.
+<sup>2</sup>*ReadOps*, *WriteOps*, and *Bandwidth* are minimum estimates. Azure Container Registry strives to improve performance as usage requires. Both resources, ACR, and the device must be in the same region to achieve a fast download speed.
 
 <sup>3</sup>A [docker pull](https://docs.docker.com/registry/spec/api/#pulling-an-image) translates to multiple read operations based on the number of layers in the image, plus the manifest retrieval.
 
@@ -50,10 +52,11 @@ ms.custom: include file
 [pricing]: https://azure.microsoft.com/pricing/details/container-registry/
 
 <!-- LINKS - Internal -->
-[geo-replication]: ../articles/container-registry/container-registry-geo-replication.md
-[content-trust]: ../articles/container-registry/container-registry-content-trust.md
-[vnet]: ../articles/container-registry/container-registry-vnet.md
-[plink]: ../articles/container-registry/container-registry-private-link.md
-[cmk]: ../articles/container-registry/tutorial-enable-customer-managed-keys.md
-[token]: ../articles/container-registry/container-registry-repository-scoped-permissions.md
-[zones]: ../articles/container-registry/zone-redundancy.md
+[geo-replication]: /azure/container-registry/container-registry-geo-replication
+[content-trust]: /azure/container-registry/container-registry-content-trust
+[vnet]: /azure/container-registry/container-registry-vnet
+[plink]: /azure/container-registry/container-registry-private-link
+[cmk]: /azure/container-registry/tutorial-enable-customer-managed-keys
+[token]: /azure/container-registry/container-registry-repository-scoped-permissions
+[zones]: /azure/container-registry/zone-redundancy
+[anonymous-pull-access]: /azure/container-registry/anonymous-pull-access

@@ -4,11 +4,11 @@ description: The various XPath settings you can use in the cloud service role co
 ms.topic: article
 ms.service: cloud-services
 ms.subservice: deployment-files
-ms.date: 10/14/2020
+ms.date: 07/23/2024
 author: hirenshah1
 ms.author: hirshah
 ms.reviewer: mimckitt
-ms.custom: 
+ms.custom: compute-evergreen
 ---
 
 # Expose role configuration settings as an environment variable with XPath
@@ -116,7 +116,7 @@ Retrieves the endpoint port for the instance.
 | Code |var port = RoleEnvironment.CurrentRoleInstance.InstanceEndpoints["Endpoint1"].IPEndpoint.Port; |
 
 ## Example
-Here is an example of a worker role that creates a startup task with an environment variable named `TestIsEmulated` set to the [@emulated xpath value](#app-running-in-emulator). 
+Here's an example of a worker role that creates a startup task with an environment variable named `TestIsEmulated` set to the [@emulated xpath value](#app-running-in-emulator). 
 
 ```xml
 <WorkerRole name="Role1">

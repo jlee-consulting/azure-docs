@@ -16,7 +16,7 @@ Kafka Connect for Azure Cosmos DB is a connector to read from and write data to 
 
 ## Prerequisites
 
-* Start with the [Confluent platform setup](https://github.com/microsoft/kafka-connect-cosmosdb/blob/dev/doc/Confluent_Platform_Setup.md) because it gives you a complete environment to work with. If you don't wish to use Confluent Platform, then you need to install and configure Zookeeper, Apache Kafka, Kafka Connect, yourself. You'll also need to install and configure the Azure Cosmos DB connectors manually.
+* Start with the [Confluent platform setup](https://github.com/microsoft/kafka-connect-cosmosdb/blob/dev/doc/Confluent_Platform_Setup.md) because it gives you a complete environment to work with. If you don't wish to use Confluent Platform, then you need to install and configure Apache Kafka, Kafka Connect, yourself. You'll also need to install and configure the Azure Cosmos DB connectors manually.
 * Create an Azure Cosmos DB account, container [setup guide](https://github.com/microsoft/kafka-connect-cosmosdb/blob/dev/doc/CosmosDB_Setup.md)
 * Bash shell, which is tested on GitHub Codespaces, Mac, Ubuntu, Windows with WSL2. This shell doesn’t work in Cloud Shell or WSL1.
 * Download [Java 11+](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
@@ -45,7 +45,7 @@ ls target/*dependencies.jar
 If you're using the Confluent Platform, the easiest way to create a Kafka topic is by using the supplied Control Center UX. Otherwise, you can create a Kafka topic manually using the following syntax:
 
 ```bash
-./kafka-topics.sh --create --zookeeper <ZOOKEEPER_URL:PORT> --replication-factor <NO_OF_REPLICATIONS> --partitions <NO_OF_PARTITIONS> --topic <TOPIC_NAME>
+./kafka-topics.sh --create --boostrap-server <URL:PORT> --replication-factor <NO_OF_REPLICATIONS> --partitions <NO_OF_PARTITIONS> --topic <TOPIC_NAME>
 ```
 
 For this scenario, we'll create a Kafka topic named “hotels” and will write non-schema embedded JSON data to the topic. To create a topic inside Control Center, see the [Confluent guide](https://docs.confluent.io/platform/current/quickstart/ce-docker-quickstart.html#step-2-create-ak-topics).
@@ -123,7 +123,7 @@ curl -H "Content-Type: application/json" -X POST -d @<path-to-JSON-config-file> 
 
 ## Confirm data written to Azure Cosmos DB
 
-Sign into the [Azure portal](https://portal.azure.com) and navigate to your Azure Cosmos DB account. Check that the three records from the “hotels” topic are created in your account.
+Sign in to the [Azure portal](https://portal.azure.com) and navigate to your Azure Cosmos DB account. Check that the three records from the “hotels” topic are created in your account.
 
 ## Cleanup
 
@@ -152,6 +152,9 @@ The following settings are used to configure an Azure Cosmos DB Kafka sink conne
 | connect.cosmos.master.key | string | The Azure Cosmos DB primary key that the sink connects with. | Required |
 | connect.cosmos.databasename | string | The name of the Azure Cosmos DB database the sink writes to. | Required |
 | connect.cosmos.containers.topicmap | string | Mapping between Kafka topics and Azure Cosmos DB containers, formatted using CSV as shown: `topic#container,topic2#container2`. | Required |
+| connect.cosmos.connection.gateway.enabled | boolean | Flag to indicate whether to use gateway mode. By default it is false. | Optional  |
+| connect.cosmos.sink.bulk.enabled | boolean | Flag to indicate whether bulk mode is enabled. By default it is true. | Optional |
+| connect.cosmos.sink.maxRetryCount | int  | Max retry attempts on transient write failures. By default it is 10 times. | Optional |
 | key.converter | string | Serialization format for the key data written into Kafka topic. | Required |
 | value.converter | string | Serialization format for the value data written into the Kafka topic. | Required |
 | key.converter.schemas.enable | string | Set to "true" if the key data has embedded schema. | Optional |
@@ -257,9 +260,8 @@ If you have non-JSON data on your source topic in Kafka and attempt to read it u
 
 ```console
 org.apache.kafka.connect.errors.DataException: Converting byte[] to Kafka Connect data failed due to serialization error:
-…
-org.apache.kafka.common.errors.SerializationException: java.io.CharConversionException: Invalid UTF-32 character 0x1cfa7e2 (above 0x0010ffff) at char #1, byte #7)
-
+...
+org.apache.kafka.common.errors.SerializationException: java.io.CharConversionException: Invalid UTF-32 character 0x1cfa7e2 (above 0x0010ffff) at char #1, byte #7
 ```
 
 This error is likely caused by data in the source topic being serialized in either Avro or another format such as CSV string.
@@ -271,6 +273,38 @@ This error is likely caused by data in the source topic being serialized in eith
 "value.converter.schema.registry.url": "http://schema-registry:8081",
 ```
 
+### Gateway mode support
+```connect.cosmos.connection.gateway.enabled``` is a configuration option for the Cosmos DB Kafka Sink Connector that enhances data ingestion by utilizing the Cosmos DB gateway service. This service acts as a front-end for Cosmos DB, offering benefits such as load balancing, request routing, and protocol translation. By leveraging the gateway service, the connector achieves improved throughput and scalability when writing data to Cosmos DB. For more information, see [connectivity modes](/azure/cosmos-db/nosql/sdk-connection-modes).
+
+```json
+"connect.cosmos.connection.gateway.enabled": true
+```
+
+### Bulk mode support
+```connect.cosmos.sink.bulk.enabled``` property determines whether the bulk write feature is enabled for writing data from Kafka topics to Azure Cosmos DB. 
+
+When this property is set to `true` (by default), it enables the bulk write mode, allowing Kafka Connect to use the bulk import API of Azure Cosmos DB for performing efficient batch writes utilizing ```CosmosContainer.executeBulkOperations()``` method. Bulk write mode significantly improves the write performance and reduces the overall latency when ingesting data into Cosmos DB in comparison with non-bulk mode when ```CosmosContainer.upsertItem()``` method is used.
+
+Bulk mode is enabled by default. To disable the `connect.cosmos.sink.bulk.enabled` property, you need to set it to `false` in the configuration for the Cosmos DB sink connector. Here's an example configuration property file:
+
+```json
+"name": "my-cosmosdb-connector",
+"connector.class": "io.confluent.connect.azure.cosmosdb.CosmosDBSinkConnector",
+"tasks.max": 1,
+"topics": "my-topic"
+"connect.cosmos.endpoint": "https://<cosmosdb-account>.documents.azure.com:443/"
+"connect.cosmos.master.key": "<cosmosdb-master-key>"
+"connect.cosmos.database": "my-database"
+"connect.cosmos.collection": "my-collection"
+"connect.cosmos.sink.bulk.enabled": false
+```
+
+By enabling the `connect.cosmos.sink.bulk.enabled` property, you can leverage the bulk write functionality in Kafka Connect for Azure Cosmos DB to achieve improved write performance when replicating data from Kafka topics to Azure Cosmos DB.
+
+```json
+"connect.cosmos.sink.bulk.enabled": true
+```
+
 ### Read non-Avro data with AvroConverter
 
 This scenario is applicable when you try to use the Avro converter to read data from a topic that isn't in Avro format. Which, includes data written by an Avro serializer other than the Confluent Schema Registry’s Avro serializer, which has its own wire format.
@@ -278,10 +312,9 @@ This scenario is applicable when you try to use the Avro converter to read data 
 ```console
 org.apache.kafka.connect.errors.DataException: my-topic-name
 at io.confluent.connect.avro.AvroConverter.toConnectData(AvroConverter.java:97)
-…
+...
 org.apache.kafka.common.errors.SerializationException: Error deserializing Avro message for id -1
 org.apache.kafka.common.errors.SerializationException: Unknown magic byte!
-
 ```
 
 **Solution**: Check the source topic’s serialization format. Then, either switch Kafka Connect’s sink connector to use the right converter or switch the upstream format to Avro.
@@ -337,3 +370,6 @@ You can learn more about change feed in Azure Cosmo DB with the following docs:
 
 * [Introduction to the change feed](https://azurecosmosdb.github.io/labs/dotnet/labs/08-change_feed_with_azure_functions.html)
 * [Reading from change feed](read-change-feed.md)
+
+You can learn more about bulk operations in V4 Java SDK with the following docs:
+* [Perform bulk operations on Azure Cosmos DB data](./bulk-executor-java.md)

@@ -1,5 +1,5 @@
 ---
-title: Collect and process Aqua satellite data - Azure Orbital
+title: Process Aqua satellite data using NASA-provided tools - Azure Orbital
 description: An end-to-end walk-through of using the Azure Orbital Ground Station (AOGS) to capture and process Aqua satellite imagery.
 ms.service: orbital
 author: EliotSeattle
@@ -9,13 +9,16 @@ ms.date: 07/13/2022
 ms.custom: template-overview 
 ---
 
-# Tutorial: Collect and process Aqua satellite data using Azure Orbital Ground Station (AOGS)
+# Tutorial: Process Aqua satellite data using NASA-provided tools
+
+> [!NOTE]
+> NASA has deprecated support of the DRL software used to process Aqua satellite imagery. Please see: [DRL Current Status](https://directreadout.sci.gsfc.nasa.gov/home.html). Steps 2, 3, and 4 of this tutorial are no longer relevant but presented for informational purposes only.
 
 This article is a comprehensive walk-through showing how to use the [Azure Orbital Ground Station (AOGS)](https://azure.microsoft.com/services/orbital/) to capture and process satellite imagery. It introduces the AOGS and its core concepts and shows how to schedule contacts. The article also steps through an example in which we collect and process NASA Aqua satellite data in an Azure virtual machine (VM) using NASA-provided tools.
 
 Aqua is a polar-orbiting spacecraft launched by NASA in 2002. Data from all science instruments aboard Aqua is downlinked to the Earth using direct broadcast over the X-band in near real-time. More information about Aqua can be found on the [Aqua Project Science](https://aqua.nasa.gov/) website. 
 
-Using AOGS, we capture the Aqua broadcast when the satellite is within line of sight of a ground station by scheduling a *contact*. A *contact* is time reserved at a ground station to communicate with a satellite. During the contact, the ground station orients its antenna towards Aqua and captures the direct broadcast data. The captured data is sent to an Azure VM as a data stream and processed using the [Real-Time Software Telemetry Processing System](http://directreadout.sci.gsfc.nasa.gov/index.cfm?section=technology&page=NISGS&subpage=NISFES&sub2page=RT-STPS&sub3Page=overview)(RT-STPS) tool provided by the [Direct Readout Laboratory](http://directreadout.sci.gsfc.nasa.gov/)(DRL) which generates a Level-0 product. This Level-0 product is processed further using DRL's [International Planetary Observation Processing Package](https://directreadout.sci.gsfc.nasa.gov/?id=dspContent&cid=68)(IPOPP) tool to produce higher level products.
+Using AOGS, we capture the Aqua broadcast when the satellite is within line of sight of a ground station by scheduling a *contact*. A *contact* is time reserved at a ground station to communicate with a satellite. During the contact, the ground station orients its antenna towards Aqua and captures the direct broadcast data. The captured data is sent to an Azure VM as a data stream and processed using the [Real-Time Software Telemetry Processing System](http://directreadout.sci.gsfc.nasa.gov/index.cfm?section=technology&page=NISGS&subpage=NISFES&sub2page=RT-STPS&sub3Page=overview)(RT-STPS) tool provided by the [Direct Readout Laboratory (DRL)](http://directreadout.sci.gsfc.nasa.gov/) which generates a Level-0 product. This Level-0 product is processed further using DRL's [International Planetary Observation Processing Package (IPOPP)](https://directreadout.sci.gsfc.nasa.gov/?id=dspContent&cid=68) tool to produce higher level products.
 
 In this tutorial, we will follow these steps to collect and process Aqua data:
 
@@ -29,17 +32,20 @@ Optional setup steps for capturing the ground station telemetry are included the
 
 ## Step 1: Use AOGS to schedule a contact and collect Aqua data
 
-Execute steps listed in [Tutorial: Downlink data from NASA's AQUA public satellite](downlink-aqua.md) 
+Execute steps listed in [Tutorial: Downlink data from NASA's Aqua public satellite](downlink-aqua.md) 
 
 The above tutorial provides a walkthrough for scheduling a contact with Aqua and collecting the direct broadcast data on an Azure VM.
 
 > [!NOTE]
-> In the section [Prepare a virtual machine (VM) to receive the downlinked AQUA data](downlink-aqua.md#prepare-your-virtual-machine-vm-and-network-to-receive-aqua-data), use the following values:
+> In the section [Prepare a virtual machine (VM) to receive the downlinked AQUA data](downlink-aqua.md#prepare-your-virtual-machine-and-network-to-receive-public-satellite-data), use the following values:
 >
 >   - **Name:** receiver-vm
->   - **Operating System:** Linux (CentOS Linux 7 or higher)
+>   - **Operating System:** Enter the name of your preferred [endorsed Linux distribution](/azure/virtual-machines/linux/endorsed-distros)
 >   - **Size:** Standard_D8s_v5 or higher
->   - **IP Address:** Ensure that the VM has at least one standard public IP address
+>   - **IP Address:** Ensure that the VM has internet access for downloading tools by having one standard public IP address
+
+> [!TIP]
+> The Public IP Address here is only for internet connectivity not Contact Data. For more information, see [Default outbound access in Azure](../virtual-network/ip-services/default-outbound-access.md).
 
 At the end of this step, you should have the raw direct broadcast data saved as ```.bin``` files under the ```~/aquadata``` folder on the ```receiver-vm```. 
 
@@ -88,7 +94,7 @@ sudo yum groups install "GNOME Desktop"
 ```
 Start VNC server:
 ```bash
-vncsever
+vncserver
 ```
 Enter a password when prompted.
 
@@ -97,6 +103,9 @@ Port forward the vncserver port (5901) over SSH to your local machine:
 ```bash
 ssh -L 5901:localhost:5901 azureuser@receiver-vm
 ```
+> [!NOTE]
+> Use either public IP address of VM DNS name to replace receiver-Vm in this command.
+
 1. On your local machine, download and install [TightVNC Viewer](https://www.tightvnc.com/download.php). 
 1. Start the TightVNC Viewer and connect to ```localhost:5901```. 
 1. Enter the vncserver password you entered in the previous step. 
@@ -107,7 +116,9 @@ From the GNOME Desktop, go to **Applications** > **Internet** > **Firefox** to s
 
 Log on to the [NASA DRL](https://directreadout.sci.gsfc.nasa.gov/?id=dspContent&cid=325&type=software) website and download the **RT-STPS** installation files and the **IPOPP downloader script** under software downloads. The downloaded files will land under ~/Downloads.
 
-Alternatively, you can download the installation files on your local machine first and then upload to a container in Azure Storage. Then use [AzCopy](../storage/common/storage-use-azcopy-v10.md) to download to your ```receiver-vm```. 
+> [!NOTE]
+> Use the same machine to download and run
+> `downloader_DRL-IPOPP_4.1.sh.`
 
 ### Install RT-STPS
 ```bash
@@ -196,7 +207,9 @@ cd ~/drl/data/pub/gsfcdata/aqua/modis/
 
 ## Next steps
 
+To easily deploy downstream components necessary to receive and process spaceborne earth observation data using Azure Orbital Ground Station, see:
+- [Azure Orbital Integration](https://github.com/Azure/azure-orbital-integration)
+
 For an end-to-end implementation that involves extracting, loading, transforming, and analyzing spaceborne data by using geospatial libraries and AI models with Azure Synapse Analytics, see: 
 
 - [Spaceborne data analysis with Azure Synapse Analytics](/azure/architecture/industries/aerospace/geospatial-processing-analytics)
-

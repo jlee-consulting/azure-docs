@@ -1,18 +1,18 @@
 ---
 title: Azure Lighthouse architecture
 description: Learn about the relationship between tenants in Azure Lighthouse, and the resources created in the customer's tenant that enable that relationship.
-ms.date: 08/26/2022
+ms.date: 07/10/2024
 ms.topic: conceptual
 ---
 
 # Azure Lighthouse architecture
 
-Azure Lighthouse helps service providers simplify customer engagement and onboarding experiences, while managing delegated resources at scale with agility and precision. Authorized users, groups, and service principals can work directly in the context of a customer subscription without having an account in that customer's Azure Active Directory (Azure AD) tenant or being a co-owner of the customer's tenant. The mechanism used to support this access is called Azure delegated resource management.
+Azure Lighthouse helps service providers simplify customer engagement and onboarding experiences, while managing delegated resources at scale with agility and precision. Authorized users, groups, and service principals can work directly in the context of a customer subscription without having an account in that customer's Microsoft Entra tenant or being a co-owner of the customer's tenant. The mechanism used to support this access is called Azure delegated resource management.
 
 :::image type="content" source="../media/delegation.jpg" alt-text="Diagram illustrating Azure delegated resource management.":::
 
 > [!TIP]
-> Azure Lighthouse can also be used [within an enterprise which has multiple Azure AD tenants of its own](enterprise.md) to simplify cross-tenant management.
+> Azure Lighthouse can also be used [within an enterprise which has multiple Microsoft Entra tenants of its own](enterprise.md) to simplify cross-tenant management.
 
 This topic discusses the relationship between tenants in Azure Lighthouse, and the resources created in the customer's tenant that enable that relationship.
 
@@ -55,7 +55,7 @@ At a high level, here's how Azure Lighthouse works for the managing tenant:
 2. Specify this access and onboard the customer to Azure Lighthouse either by [publishing a Managed Service offer to Azure Marketplace](../how-to/publish-managed-services-offers.md), or by [deploying an Azure Resource Manager template](../how-to/onboard-customer.md). This onboarding process creates the two resources described above (registration definition and registration assignment) in the customer's tenant.
 3. Once the customer has been onboarded, authorized users sign in to your managing tenant and perform tasks at the specified customer scope (subscription or resource group) per the access that you defined. Customers can review all actions taken, and they can remove access at any time.
 
-While in most cases only one service provider will be managing specific resources for a customer, it’s possible for the customer to create multiple delegations for the same subscription or resource group, allowing multiple service providers to have access. This scenario also enables ISV scenarios that [project resources from the service provider’s tenant to multiple customers](isv-scenarios.md#saas-based-multi-tenant-offerings).
+While in most cases only one service provider will be managing specific resources for a customer, it’s possible for the customer to create multiple delegations for the same subscription or resource group, allowing multiple service providers to have access. This scenario also enables ISV scenarios that [project resources from the service provider’s tenant to multiple customers](isv-scenarios.md#saas-based-multitenant-offerings).
 
 ## Next steps
 

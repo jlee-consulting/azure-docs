@@ -4,8 +4,10 @@ description: Describes the name generation pattern.
 author: johndowns
 ms.author: jodowns
 ms.topic: conceptual
-ms.date: 12/01/2021
+ms.custom: devx-track-bicep
+ms.date: 06/23/2023
 ---
+
 # Name generation pattern
 
 Within your Bicep files, use string interpolation and Bicep functions to create resource names that are unique, deterministic, meaningful, and different for each environment that you deploy to.
@@ -57,7 +59,7 @@ The following example generates the names for two storage accounts for a differe
   > ```bicep
   > var uniqueNameComponent = uniqueString(resourceGroup().id)
   > ```
-  > 
+  >
   > The name of the resource group (`resourceGroup().name`) may not be sufficiently unique to enable you to reuse the file across subscriptions.
 - Avoid changing the seed values for the `uniqueString()` function after resources have been deployed. Changing the seed value results in new names, and might affect your production resources.
 

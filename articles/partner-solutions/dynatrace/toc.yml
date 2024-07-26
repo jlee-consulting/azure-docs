@@ -1,12 +1,15 @@
-- name: Dynatrace for Azure Documentation 
+items:
+- name: Azure Native Dynatrace Service Documentation 
   href: index.yml
 - name: Overview
   items:
-  - name: What is Dynatrace?
+  - name: What is Azure Native Dynatrace Service?
     href: dynatrace-overview.md
 - name: Quickstarts
   expanded: true
   items:
+  - name: Start a free trial
+    href: dynatrace-free-trial.md
   - name: Create Dynatrace resource
     href: dynatrace-create.md
   - name: Link to existing Dynatrace resource
@@ -18,7 +21,11 @@
   - name: Manage Dynatrace
     href: dynatrace-how-to-manage.md
   - name: Troubleshoot
-    href: dynatrace-troubleshoot.md
+    items:
+    - name: Get support
+      href: dynatrace-get-support.md
+    - name: Fix common errors
+      href: dynatrace-troubleshoot.md
 - name: Reference
   items:
   - name: Python

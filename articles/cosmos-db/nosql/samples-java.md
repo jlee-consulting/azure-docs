@@ -8,7 +8,7 @@ ms.subservice: nosql
 ms.topic: sample
 ms.date: 08/26/2021
 ms.devlang: java
-ms.custom: devx-track-java, ignite-2022
+ms.custom: devx-track-java, devx-track-extended-java
 ms.author: sidandrews
 ms.reviewer: mjbrown
 ---
@@ -18,7 +18,7 @@ ms.reviewer: mjbrown
 > [!div class="op_single_selector"]
 > * [.NET SDK Examples](samples-dotnet.md)
 > * [Java V4 SDK Examples](samples-java.md)
-> * [Spring Data V3 SDK Examples](samples-java-spring-data.md)
+> * [Spring Data V5 SDK Examples](samples-java-spring-data.md)
 > * [Node.js Examples](samples-nodejs.md)
 > * [Python Examples](samples-python.md)
 > * [Azure Code Sample Gallery](https://azure.microsoft.com/resources/samples/?sort=0&service=cosmos-db)
@@ -30,7 +30,7 @@ ms.reviewer: mjbrown
 >
 
 > [!IMPORTANT]  
->[!INCLUDE [quickstarts-free-trial-note](../../../includes/quickstarts-free-trial-note.md)]
+>[!INCLUDE [quickstarts-free-trial-note](~/reusable-content/ce-skilling/azure/includes/quickstarts-free-trial-note.md)]
 >  
 >- You can [activate Visual Studio subscriber benefits](https://azure.microsoft.com/pricing/member-offers/msdn-benefits-details/?ref=microsoft.com&utm_source=microsoft.com&utm_medium=docs&utm_campaign=visualstudio): Your Visual Studio subscription gives you credits every month that you can use for paid Azure services.
 >
@@ -68,7 +68,7 @@ $ git clone https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples.g
 $ cd azure-cosmos-java-sql-api-samples
 ```
 
-You can run the samples using either an IDE (Eclipse, IntelliJ, or VSCODE) or from the command line using Maven.
+You can run the samples using either an IDE (Eclipse, IntelliJ, or VS Code) or from the command line using Maven.
 
 These environment variables must be set
 
@@ -100,7 +100,7 @@ where *sample.synchronicity.MainClass* can be
 > 
 
 ## Database examples
-The Database CRUD Sample files for [sync](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/databasecrud/sync/DatabaseCRUDQuickstart.java) and [async](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/databasecrud/async/DatabaseCRUDQuickstartAsync.java) show how to perform the following tasks. To learn about the Azure Cosmos DB databases before running the following samples, see [Working with databases, containers, and items](../account-databases-containers-items.md) conceptual article. 
+The Database CRUD Sample files for [sync](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/databasecrud/sync/DatabaseCRUDQuickstart.java) and [async](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/databasecrud/async/DatabaseCRUDQuickstartAsync.java) show how to perform the following tasks. To learn about the Azure Cosmos DB databases before running the following samples, see [Working with databases, containers, and items](../resource-model.md) conceptual article. 
 
 | Task | API reference |
 | --- | --- |
@@ -110,7 +110,7 @@ The Database CRUD Sample files for [sync](https://github.com/Azure-Samples/azure
 | Delete a database | [CosmosDatabase.delete](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/databasecrud/sync/DatabaseCRUDQuickstart.java#L114-L122)  <br> [CosmosAsyncDatabase.delete](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/0ead4ca33dac72c223285e1db866c9dc06f5fb47/src/main/java/com/azure/cosmos/examples/databasecrud/async/DatabaseCRUDQuickstartAsync.java#L127-L135)  |
 
 ## Collection examples
-The Collection CRUD Samples files for [sync](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/containercrud/sync/ContainerCRUDQuickstart.java) and [async](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/containercrud/async/ContainerCRUDQuickstartAsync.java) show how to perform the following tasks. To learn about the Azure Cosmos DB collections before running the following samples, see [Working with databases, containers, and items](../account-databases-containers-items.md) conceptual article.
+The Collection CRUD Samples files for [sync](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/containercrud/sync/ContainerCRUDQuickstart.java) and [async](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/containercrud/async/ContainerCRUDQuickstartAsync.java) show how to perform the following tasks. To learn about the Azure Cosmos DB collections before running the following samples, see [Working with databases, containers, and items](../resource-model.md) conceptual article.
 
 | Task | API reference |
 | --- | --- |
@@ -147,8 +147,11 @@ The Analytical storage Collection CRUD Samples files for [sync](https://github.c
 | --- | --- | 
 | Create a collection | [CosmosDatabase.createContainerIfNotExists](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/analyticalcontainercrud/sync/AnalyticalContainerCRUDQuickstart.java#L91-L106) <br> [CosmosAsyncDatabase.createContainerIfNotExists](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/0ead4ca33dac72c223285e1db866c9dc06f5fb47/src/main/java/com/azure/cosmos/examples/analyticalcontainercrud/async/AnalyticalContainerCRUDQuickstartAsync.java#L91-L106) |
 
-## Document examples
-The Document CRUD Samples files for [sync](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/documentcrud/sync/DocumentCRUDQuickstart.java) and [async](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/documentcrud/async/DocumentCRUDQuickstartAsync.java) show how to perform the following tasks. To learn about the Azure Cosmos DB documents before running the following samples, see [Working with databases, containers, and items](../account-databases-containers-items.md) conceptual article.
+## Item examples
+The Document CRUD Samples files for [sync](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/documentcrud/sync/DocumentCRUDQuickstart.java) and [async](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/documentcrud/async/DocumentCRUDQuickstartAsync.java) show how to perform the following tasks. To learn about the Azure Cosmos DB documents before running the following samples, see [Working with databases, containers, and items](../resource-model.md) conceptual article.
+
+> [!NOTE]
+> You must specify a partition key when performing operations against a specific item.
 
 | Task | API reference |
 | --- | --- |
@@ -165,7 +168,7 @@ The Document CRUD Samples files for [sync](https://github.com/Azure-Samples/azur
 | Transactional batch | [batch samples](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/batch/async/SampleBatchQuickStartAsync.java) |
 
 ## Indexing examples
-The [Collection CRUD Samples](https://github.com/Azure/azure-documentdb-java/blob/master/documentdb-examples/src/test/java/com/microsoft/azure/documentdb/examples/CollectionCrudSamples.java) file shows how to perform the following tasks. To learn about indexing in Azure Cosmos DB before running the following samples, see [indexing policies](../index-policy.md), [indexing types](../index-overview.md#index-types), and [indexing paths](../index-policy.md#include-exclude-paths) conceptual articles. 
+The [Collection CRUD Samples](https://github.com/Azure/azure-documentdb-java/blob/master/documentdb-examples/src/test/java/com/microsoft/azure/documentdb/examples/CollectionCrudSamples.java) file shows how to perform the following tasks. To learn about indexing in Azure Cosmos DB before running the following samples, see [indexing policies](../index-policy.md), [indexing types](../index-overview.md#types-of-indexes), and [indexing paths](../index-policy.md#include-exclude-paths) conceptual articles. 
 
 | Task | API reference |
 | --- | --- |
@@ -173,12 +176,6 @@ The [Collection CRUD Samples](https://github.com/Azure/azure-documentdb-java/blo
 | Exclude specified documents paths from the index | [IndexingPolicy.ExcludedPaths](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/indexmanagement/sync/SampleIndexManagement.java#L148-L151) |
 | Create a composite index | [IndexingPolicy.setCompositeIndexes](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/indexmanagement/sync/SampleIndexManagement.java#L167-L184) <br> CompositePath |
 | Create a geospatial index | [IndexingPolicy.setSpatialIndexes](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/indexmanagement/sync/SampleIndexManagement.java#L153-L165) <br> SpatialSpec <br> SpatialType |
-<!-- | Exclude a document from the index | ExcludedIndex<br>IndexingPolicy | -->
-<!-- | Use Lazy Indexing | IndexingPolicy.IndexingMode | -->
-<!-- | Force a range scan operation on a hash indexed path | FeedOptions.EnableScanInQuery | -->
-<!-- | Use range indexes on Strings | IndexingPolicy.IncludedPaths<br>RangeIndex | -->
-<!-- | Perform an index transform | - | -->
-
 
 For more information about indexing, see [Azure Cosmos DB indexing policies](../index-policy.md).
 
@@ -201,7 +198,6 @@ The Query Samples files for [sync](https://github.com/Azure-Samples/azure-cosmos
 | Query with parameterized SQL using SqlQuerySpec | [CosmosContainer.queryItems](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/queries/sync/QueriesQuickstart.java#L387-L416) <br> [CosmosAsyncContainer.queryItems](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/0ead4ca33dac72c223285e1db866c9dc06f5fb47/src/main/java/com/azure/cosmos/examples/queries/async/QueriesQuickstartAsync.java#L426-L455)|
 | Query with explicit paging | [CosmosContainer.queryItems](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/queries/sync/QueriesQuickstart.java#L211-L261) <br>  [CosmosAsyncContainer.queryItems](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/0ead4ca33dac72c223285e1db866c9dc06f5fb47/src/main/java/com/azure/cosmos/examples/queries/async/QueriesQuickstartAsync.java#L250-L300)|
 | Query partitioned collections in parallel | [CosmosContainer.queryItems](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/queries/sync/QueriesQuickstart.java#L263-L284) <br> [CosmosAsyncContainer.queryItems](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/0ead4ca33dac72c223285e1db866c9dc06f5fb47/src/main/java/com/azure/cosmos/examples/queries/async/QueriesQuickstartAsync.java#L302-L323)|
-<!-- | Query with ORDER BY for partitioned collections | CosmosContainer.queryItems <br> CosmosAsyncContainer.queryItems | -->
 
 ## Change feed examples 
 The [Change Feed Processor Sample](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/changefeed/SampleChangeFeedProcessor.java) file shows how to do the following tasks. To learn about change feed in Azure Cosmos DB before you run the following samples, see [Read Azure Cosmos DB change feed](read-change-feed.md) and [Change feed processor](/azure/cosmos-db/sql/change-feed-processor?tabs=java).
@@ -210,7 +206,6 @@ The [Change Feed Processor Sample](https://github.com/Azure-Samples/azure-cosmos
 | --- | --- |
 | Basic change feed functionality | [ChangeFeedProcessor.changeFeedProcessorBuilder](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/changefeed/SampleChangeFeedProcessor.java#L141-L172) |
 | Read change feed from the beginning | [ChangeFeedProcessorOptions.setStartFromBeginning()](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/0ead4ca33dac72c223285e1db866c9dc06f5fb47/src/main/java/com/azure/cosmos/examples/changefeed/SampleChangeFeedProcessor.java#L65) |
-<!-- | Read change feed from a specific time | ChangeFeedProcessor.changeFeedProcessorBuilder | -->
 
 ## Server-side programming examples
 
@@ -221,15 +216,6 @@ The [Stored Procedure Sample](https://github.com/Azure-Samples/azure-cosmos-java
 | Create a stored procedure | [CosmosScripts.createStoredProcedure](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/storedprocedure/sync/SampleStoredProcedure.java#L134-L153) |
 | Execute a stored procedure | [CosmosStoredProcedure.execute](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/storedprocedure/sync/SampleStoredProcedure.java#L213-L227) |
 | Delete a stored procedure | [CosmosStoredProcedure.delete](https://github.com/Azure-Samples/azure-cosmos-java-sql-api-samples/blob/main/src/main/java/com/azure/cosmos/examples/storedprocedure/sync/SampleStoredProcedure.java#L254-L264) |
-
-<!-- ## User management examples
-The User Management Sample file shows how to do the following tasks:
-
-| Task | API reference |
-| --- | --- |
-| Create a user | - |
-| Set permissions on a collection or document | - |
-| Get a list of a user's permissions |- | -->
 
 ## Next steps
 

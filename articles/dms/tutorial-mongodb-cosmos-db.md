@@ -1,29 +1,28 @@
 ---
-title: "Tutorial: Migrate MongoDB offline to Azure Cosmos DB for MongoDB"
+title: "Tutorial: Migrate MongoDB offline to Azure Cosmos DB for MongoDB RU"
 titleSuffix: Azure Database Migration Service
-description: Migrate from MongoDB on-premises to Azure Cosmos DB for MongoDB offline via Azure Database Migration Service.
-services: dms
-author: croblesm
-ms.author: roblescarlos
-manager: craigg
-ms.reviewer: craigg
-ms.service: dms
-ms.workload: data-services
-ms.custom: seo-lt-2019, ignite-2022
-ms.topic: tutorial
+description: Migrate from MongoDB on-premises to Azure Cosmos DB for MongoDB RU offline via Azure Database Migration Service.
+author: abhims14
+ms.author: abhishekum
+ms.reviewer: randolphwest
 ms.date: 09/21/2021
+ms.service: dms
+ms.topic: tutorial
+ms.custom:
+  - sql-migration-content
+  - ignite-2023
 ---
 
-# Tutorial: Migrate MongoDB to Azure Cosmos DB for MongoDB offline
-[!INCLUDE[appliesto-mongodb-api](../cosmos-db/includes/appliesto-mongodb.md)]
+# Tutorial: Migrate MongoDB to Azure Cosmos DB for MongoDB RU offline using Azure Database Migration Service
+
+[!INCLUDE[appliesto-mongodb-api](~/reusable-content/ce-skilling/azure/includes/cosmos-db/includes/appliesto-mongodb.md)]
 
 > [!IMPORTANT]
-> Please read this entire guide before carrying out your migration steps.
->
+> Please read this entire guide before carrying out your migration steps. Azure Database Migration Service does not currently support migrations to an Azure Cosmos DB for MongoDB vCore account. Use the [Azure Cosmos DB for MongoDB extension in Azure Data Studio](/azure-data-studio/extensions/database-migration-for-mongo-extension) to migrate your MongoDB workfloads offline to Azure Cosmos DB for MongoDB vCore.
 
 This MongoDB migration guide is part of series on MongoDB migration. The critical MongoDB migration steps are [pre-migration](../cosmos-db/mongodb-pre-migration.md), migration, and [post-migration](../cosmos-db/mongodb-post-migration.md), as shown below.
 
-![Diagram of migration steps.](../cosmos-db/mongodb/media/pre-migration-steps/overall-migration-steps.png)
+![Diagram of migration steps.](~/reusable-content/ce-skilling/azure/media/cosmos-db/overall-migration-steps.png)
 
 ## Overview of offline data migration from MongoDB to Azure Cosmos DB using DMS
 
@@ -74,13 +73,13 @@ The Server Side Retry feature of Azure Cosmos DB allows the service to intercept
 
 To use Server Side Retry, in the Azure Cosmos DB portal, select **Features** > **Server Side Retry**.
 
-![Screenshot that shows where to find the Server Side Retry feature.](media/tutorial-mongodb-to-cosmosdb/mongo-server-side-retry-feature.png)
+![Screenshot that shows where to find the Server Side Retry feature.](~/reusable-content/ce-skilling/azure/media/dms/mongo-server-side-retry-feature.png)
 
 If the feature is disabled, select **Enable**.
 
-![Screenshot that shows how to enable Server Side Retry.](media/tutorial-mongodb-to-cosmosdb/mongo-server-side-retry-enable.png)
+![Screenshot that shows how to enable Server Side Retry.](~/reusable-content/ce-skilling/azure/media/dms/mongo-server-side-retry-enable.png)
 
-[!INCLUDE [resource-provider-register](../../includes/database-migration-service-resource-provider-register.md)]  
+[!INCLUDE [resource-provider-register](./includes/database-migration-service-resource-provider-register.md)]  
 
 ## Create an instance
 
@@ -235,9 +234,9 @@ After you migrate the data stored in MongoDB database to the Azure Cosmos DB for
 ## Additional resources
 
 * Trying to do capacity planning for a migration to Azure Cosmos DB?
-    * If all you know is the number of vcores and servers in your existing database cluster, read about [estimating request units using vCores or vCPUs](../cosmos-db/convert-vcore-to-request-unit.md) 
+    * If all you know is the number of vCores and servers in your existing database cluster, read about [estimating request units using vCores or vCPUs](../cosmos-db/convert-vcore-to-request-unit.md) 
     * If you know typical request rates for your current database workload, read about [estimating request units using Azure Cosmos DB capacity planner](../cosmos-db/mongodb/estimate-ru-capacity-planner.md)
 
 ## Next steps
 
-Review migration guidance for additional scenarios in the [Azure Database Migration Guide](https://datamigration.microsoft.com/).
+Review migration guidance for additional scenarios in the [Azure Database Migration Guide](/data-migration/).

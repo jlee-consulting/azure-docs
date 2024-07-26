@@ -2,19 +2,17 @@
 title: Configure monitoring for ASP.NET with Azure Application Insights | Microsoft Docs
 description: Configure performance, availability, and user behavior analytics tools for your ASP.NET website hosted on-premises or in Azure.
 ms.topic: conceptual
-ms.date: 10/12/2021
+ms.date: 01/31/2024
 ms.devlang: csharp
-ms.custom: contperf-fy21q1
 ---
 
 # Configure Application Insights for your ASP.NET website
 
 This procedure configures your ASP.NET web app to send telemetry to the [Application Insights](./app-insights-overview.md) feature of the Azure Monitor service. It works for ASP.NET apps that are hosted either in your own IIS servers on-premises or in the cloud. 
 
-> [!NOTE]
-> A preview [OpenTelemetry-based .NET offering](opentelemetry-enable.md?tabs=net) is available. [Learn more](opentelemetry-overview.md).
+[!INCLUDE [azure-monitor-app-insights-otel-available-notification](../includes/azure-monitor-app-insights-otel-available-notification.md)]
 
-[!INCLUDE [azure-monitor-log-analytics-rebrand](../../../includes/azure-monitor-instrumentation-key-deprecation.md)]
+[!INCLUDE [azure-monitor-log-analytics-rebrand](~/reusable-content/ce-skilling/azure/includes/azure-monitor-instrumentation-key-deprecation.md)]
 
 ## Prerequisites
 To add Application Insights to your ASP.NET website, you need to:
@@ -42,7 +40,7 @@ To add Application Insights to your ASP.NET website, you need to:
 
 ## Add Application Insights automatically
 
-This section will guide you through automatically adding Application Insights to a template-based ASP.NET web app. From within your ASP.NET web app project in Visual Studio:
+This section guides you through automatically adding Application Insights to a template-based ASP.NET web app. From within your ASP.NET web app project in Visual Studio:
 
 1. Select **Project** > **Add Application Insights Telemetry** > **Application Insights Sdk (local)** > **Next** > **Finish** > **Close**.
 2. Open the *ApplicationInsights.config* file. 
@@ -53,11 +51,11 @@ This section will guide you through automatically adding Application Insights to
     ```
 
 4. Select **Project** > **Manage NuGet Packages** > **Updates**. Then update each `Microsoft.ApplicationInsights` NuGet package to the latest stable release.   
-5. Run your application by selecting **IIS Express**. A basic ASP.NET app opens. As you browse through the pages on the site, telemetry will be sent to Application Insights.
+5. Run your application by selecting **IIS Express**. A basic ASP.NET app opens. As you browse through the pages on the site, telemetry is sent to Application Insights.
 
 ## Add Application Insights manually
 
-This section will guide you through manually adding Application Insights to a template-based ASP.NET web app. This section assumes that you're using a web app based on the standard MVC web app template for the ASP.NET Framework.
+This section guides you through manually adding Application Insights to a template-based ASP.NET web app. This section assumes that you're using a web app based on the standard MVC web app template for the ASP.NET Framework.
 
 1. Add the following NuGet packages and their dependencies to your project:
 
@@ -67,7 +65,7 @@ This section will guide you through manually adding Application Insights to a te
 
 2. In some cases, the *ApplicationInsights.config* file is created for you automatically. If the file is already present, skip to step 4. 
 
-   If it's not created automatically, you'll need to create it yourself. In the root directory of an ASP.NET application, create a new file called *ApplicationInsights.config*.
+   If it's not created automatically, you need to create it yourself. In the root directory of an ASP.NET application, create a new file called *ApplicationInsights.config*.
 
 3. Copy the following XML configuration into your newly created file:
 
@@ -108,7 +106,7 @@ This section will guide you through manually adding Application Insights to a te
           </ExcludeComponentCorrelationHttpHeadersOnDomains>
           <IncludeDiagnosticSourceActivities>
             <Add>Microsoft.Azure.EventHubs</Add>
-            <Add>Microsoft.Azure.ServiceBus</Add>
+            <Add>Azure.Messaging.ServiceBus</Add>
           </IncludeDiagnosticSourceActivities>
         </Add>
         <Add Type="Microsoft.ApplicationInsights.Extensibility.PerfCounterCollector.PerformanceCollectorModule, Microsoft.AI.PerfCounterCollector">
@@ -195,7 +193,7 @@ This section will guide you through manually adding Application Insights to a te
             <Add Type="Microsoft.ApplicationInsights.Extensibility.AutocollectedMetricsExtractor, Microsoft.ApplicationInsights" />
             <Add Type="Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.AdaptiveSamplingTelemetryProcessor, Microsoft.AI.ServerTelemetryChannel">
               <MaxTelemetryItemsPerSecond>5</MaxTelemetryItemsPerSecond>
-              <ExcludedTypes>Trace</ExcludedTypes>
+              <ExcludedTypes>Event</ExcludedTypes>
             </Add>
             <Add Type="Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.AdaptiveSamplingTelemetryProcessor, Microsoft.AI.ServerTelemetryChannel">
               <MaxTelemetryItemsPerSecond>5</MaxTelemetryItemsPerSecond>
@@ -357,11 +355,181 @@ You have now successfully configured server-side application monitoring. If you 
 
 ## Add client-side monitoring
 
-The previous sections provided guidance on methods to automatically and manually configure server-side monitoring. To add client-side monitoring, use the [client-side JavaScript SDK](javascript.md). You can monitor any web page's client-side transactions by adding a [JavaScript snippet](javascript.md#snippet-based-setup) before the closing `</head>` tag of the page's HTML. 
+The previous sections provided guidance on methods to automatically and manually configure server-side monitoring. To add client-side monitoring, use the [client-side JavaScript SDK](javascript.md). You can monitor any web page's client-side transactions by adding a [JavaScript JavaScript (Web) SDK Loader Script](./javascript-sdk.md?tabs=javascriptwebsdkloaderscript#get-started) before the closing `</head>` tag of the page's HTML. 
 
-Although it's possible to manually add the snippet to the header of each HTML page, we recommend that you instead add the snippet to a primary page. That action will inject the snippet into all pages of a site. 
+Although it's possible to manually add the JavaScript (Web) SDK Loader Script to the header of each HTML page, we recommend that you instead add the JavaScript (Web) SDK Loader Script to a primary page. That action injects the JavaScript (Web) SDK Loader Script into all pages of a site. 
 
-For the template-based ASP.NET MVC app from this article, the file that you need to edit is *_Layout.cshtml*. You can find it under **Views** > **Shared**. To add client-side monitoring, open *_Layout.cshtml* and follow the [snippet-based setup instructions](javascript.md#snippet-based-setup) from the article about client-side JavaScript SDK configuration.
+For the template-based ASP.NET MVC app from this article, the file that you need to edit is *_Layout.cshtml*. You can find it under **Views** > **Shared**. To add client-side monitoring, open *_Layout.cshtml* and follow the [JavaScript (Web) SDK Loader Script-based setup instructions](./javascript-sdk.md?tabs=javascriptwebsdkloaderscript#get-started) from the article about client-side JavaScript SDK configuration.
+
+## Live metrics
+
+[Live metrics](./live-stream.md) can be used to quickly verify if application monitoring with Application Insights is configured correctly. Telemetry can take a few minutes to appear in the Azure portal, but the live metrics pane shows CPU usage of the running process in near real time. It can also show other telemetry like requests, dependencies, and traces.
+
+### Enable live metrics by using code for any .NET application
+
+> [!NOTE]
+> Live metrics are enabled by default when you onboard it by using the recommended instructions for .NET applications.
+
+To manually configure live metrics:
+
+1. Install the NuGet package [Microsoft.ApplicationInsights.PerfCounterCollector](https://www.nuget.org/packages/Microsoft.ApplicationInsights.PerfCounterCollector).
+1. The following sample console app code shows setting up live metrics:
+
+```csharp
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.Extensibility.PerfCounterCollector.QuickPulse;
+using System;
+using System.Threading.Tasks;
+
+namespace LiveMetricsDemo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create a TelemetryConfiguration instance.
+            TelemetryConfiguration config = TelemetryConfiguration.CreateDefault();
+            config.InstrumentationKey = "INSTRUMENTATION-KEY-HERE";
+            QuickPulseTelemetryProcessor quickPulseProcessor = null;
+            config.DefaultTelemetrySink.TelemetryProcessorChainBuilder
+                .Use((next) =>
+                {
+                    quickPulseProcessor = new QuickPulseTelemetryProcessor(next);
+                    return quickPulseProcessor;
+                })
+                .Build();
+
+            var quickPulseModule = new QuickPulseTelemetryModule();
+
+            // Secure the control channel.
+            // This is optional, but recommended.
+            quickPulseModule.AuthenticationApiKey = "YOUR-API-KEY-HERE";
+            quickPulseModule.Initialize(config);
+            quickPulseModule.RegisterTelemetryProcessor(quickPulseProcessor);
+
+            // Create a TelemetryClient instance. It is important
+            // to use the same TelemetryConfiguration here as the one
+            // used to set up live metrics.
+            TelemetryClient client = new TelemetryClient(config);
+
+            // This sample runs indefinitely. Replace with actual application logic.
+            while (true)
+            {
+                // Send dependency and request telemetry.
+                // These will be shown in live metrics.
+                // CPU/Memory Performance counter is also shown
+                // automatically without any additional steps.
+                client.TrackDependency("My dependency", "target", "http://sample",
+                    DateTimeOffset.Now, TimeSpan.FromMilliseconds(300), true);
+                client.TrackRequest("My Request", DateTimeOffset.Now,
+                    TimeSpan.FromMilliseconds(230), "200", true);
+                Task.Delay(1000).Wait();
+            }
+        }
+    }
+}
+```
+
+The preceding sample is for a console app, but the same code can be used in any .NET applications. If any other telemetry modules are enabled to autocollect telemetry, it's important to ensure that the same configuration used for initializing those modules is used for the live metrics module.
+
+## Frequently asked questions
+
+This section provides answers to common questions.
+
+### How can I uninstall the SDK?
+
+To remove Application Insights, you need to remove the NuGet packages and references from the API in your application. You can uninstall NuGet packages by using the NuGet Package Manager in Visual Studio.
+
+1. If trace collection is enabled, first uninstall the Microsoft.ApplicationInsights.TraceListener package by using the [NuGet Package Manager](/nuget/consume-packages/install-use-packages-visual-studio#uninstall-a-package) but don't remove any dependencies.
+1. Uninstall the Microsoft.ApplicationInsights.Web package and remove its dependencies by using the [NuGet Package Manager](/nuget/consume-packages/install-use-packages-visual-studio#uninstall-a-package) and its [Uninstall options](/nuget/consume-packages/install-use-packages-visual-studio#uninstall-options) within the [NuGet Package Manager Options control](/nuget/consume-packages/install-use-packages-visual-studio#nuget-package-manager-options-control).
+1. To fully remove Application Insights, check and manually delete the added code or files along with any API calls you added in your project. For more information, see [What is created when you add the Application Insights SDK?](#what-is-created-when-you-add-the-application-insights-sdk).
+
+### What is created when you add the Application Insights SDK?
+
+When you add Application Insights to your project, it creates files and adds code to some of your files. Solely uninstalling the NuGet Packages won't always discard the files and code. To fully remove Application Insights, you should check and manually delete the added code or files along with any API calls you added in your project.
+
+When you add Application Insights Telemetry to a Visual Studio ASP.NET project, it adds the following files:
+
+- ApplicationInsights.config
+- AiHandleErrorAttribute.cs
+
+The following pieces of code are added:
+
+- [Your project's name].csproj
+
+    ```C#
+     <ApplicationInsightsResourceId>/subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/WebApplication4</ApplicationInsightsResourceId>
+    ```
+
+- Packages.config
+
+    ```xml
+    <packages>
+    ...
+    
+      <package id="Microsoft.ApplicationInsights" version="2.12.0" targetFramework="net472" />
+      <package id="Microsoft.ApplicationInsights.Agent.Intercept" version="2.4.0" targetFramework="net472" />
+      <package id="Microsoft.ApplicationInsights.DependencyCollector" version="2.12.0" targetFramework="net472" />
+      <package id="Microsoft.ApplicationInsights.PerfCounterCollector" version="2.12.0" targetFramework="net472" />
+      <package id="Microsoft.ApplicationInsights.Web" version="2.12.0" targetFramework="net472" />
+      <package id="Microsoft.ApplicationInsights.WindowsServer" version="2.12.0" targetFramework="net472" />
+      <package id="Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel" version="2.12.0" targetFramework="net472" />
+    
+      <package id="Microsoft.AspNet.TelemetryCorrelation" version="1.0.7" targetFramework="net472" />
+    
+      <package id="System.Buffers" version="4.4.0" targetFramework="net472" />
+      <package id="System.Diagnostics.DiagnosticSource" version="4.6.0" targetFramework="net472" />
+      <package id="System.Memory" version="4.5.3" targetFramework="net472" />
+      <package id="System.Numerics.Vectors" version="4.4.0" targetFramework="net472" />
+      <package id="System.Runtime.CompilerServices.Unsafe" version="4.5.2" targetFramework="net472" />
+    ...
+    </packages>
+    ```
+
+- Layout.cshtml
+
+    If your project has a Layout.cshtml file the code below is added.
+    
+    ```html
+    <head>
+    ...
+        <script type = 'text/javascript' >
+            var appInsights=window.appInsights||function(config)
+            {
+                function r(config){ t[config] = function(){ var i = arguments; t.queue.push(function(){ t[config].apply(t, i)})} }
+                var t = { config:config},u=document,e=window,o='script',s=u.createElement(o),i,f;for(s.src=config.url||'//az416426.vo.msecnd.net/scripts/a/ai.0.js',u.getElementsByTagName(o)[0].parentNode.appendChild(s),t.cookie=u.cookie,t.queue=[],i=['Event','Exception','Metric','PageView','Trace','Ajax'];i.length;)r('track'+i.pop());return r('setAuthenticatedUserContext'),r('clearAuthenticatedUserContext'),config.disableExceptionTracking||(i='onerror',r('_'+i),f=e[i],e[i]=function(config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t['_' + i](config, r, u, e, o),s}),t
+            }({
+                instrumentationKey:'00000000-0000-0000-0000-000000000000'
+            });
+            
+            window.appInsights=appInsights;
+            appInsights.trackPageView();
+        </script>
+    ...
+    </head>
+    ```
+
+- ConnectedService.json
+
+    ```json
+    {
+      "ProviderId": "Microsoft.ApplicationInsights.ConnectedService.ConnectedServiceProvider",
+      "Version": "16.0.0.0",
+      "GettingStartedDocument": {
+        "Uri": "https://go.microsoft.com/fwlink/?LinkID=613413"
+      }
+    }
+    ```
+
+- FilterConfig.cs
+
+    ```csharp
+            public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+            {
+                filters.Add(new ErrorHandler.AiHandleErrorAttribute());// This line was added
+            }
+    ```
 
 ## Troubleshooting
 
@@ -369,7 +537,7 @@ See the dedicated [troubleshooting article](/troubleshoot/azure/azure-monitor/ap
 
 There's a known issue in the current version of Visual Studio 2019: storing the instrumentation key or connection string in a user secret is broken for .NET Framework-based apps. The key ultimately has to be hardcoded into the *applicationinsights.config* file to work around this bug. This article is designed to avoid this issue entirely, by not using user secrets.
 
-[!INCLUDE [azure-monitor-app-insights-test-connectivity](../../../includes/azure-monitor-app-insights-test-connectivity.md)]
+[!INCLUDE [azure-monitor-app-insights-test-connectivity](../includes/azure-monitor-app-insights-test-connectivity.md)]
 
 ## Open-source SDK
 
@@ -377,7 +545,13 @@ There's a known issue in the current version of Visual Studio 2019: storing the 
 
 For the latest updates and bug fixes, [consult the release notes](./release-notes.md).
 
+## Release Notes
+
+For version 2.12 and newer: [.NET SDKs (Including ASP.NET, ASP.NET Core, and Logging Adapters)](https://github.com/Microsoft/ApplicationInsights-dotnet/releases) 
+
+Our [Service Updates](https://azure.microsoft.com/updates/?service=application-insights) also summarize major Application Insights improvements.
+
 ## Next steps
 
-* Add synthetic transactions to test that your website is available from all over the world with [availability monitoring](monitor-web-app-availability.md).
+* Add synthetic transactions to test that your website is available from all over the world with [availability monitoring](availability-overview.md).
 * [Configure sampling](sampling.md) to help reduce telemetry traffic and data storage costs.

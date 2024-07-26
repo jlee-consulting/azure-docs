@@ -3,23 +3,19 @@ title: Tutorial - Use Azure Key Vault with an Azure web app in .NET
 description: In this tutorial, you'll configure an Azure web app in an ASP.NET Core application to read a secret from your key vault.
 services: key-vault
 author: msmbaldwin
-manager: rajvijan
-
 ms.service: key-vault
 ms.subservice: general
 ms.topic: tutorial
-ms.date: 05/06/2020
+ms.date: 02/20/2024
 ms.author: mbaldwin
 ms.devlang: csharp
-ms.custom: devx-track-csharp, devx-track-azurecli
-
+ms.custom: devx-track-csharp, devx-track-azurecli, devx-track-dotnet
 #Customer intent: As a developer, I want to use Azure Key Vault to store secrets for my app to help keep them secure.
-
 ---
 
 # Tutorial: Use a managed identity to connect Key Vault to an Azure web app in .NET
 
-[Azure Key Vault](./overview.md) provides a way to store credentials and other secrets with increased security. But your code needs to authenticate to Key Vault to retrieve them. [Managed identities for Azure resources](../../active-directory/managed-identities-azure-resources/overview.md) help to solve this problem by giving Azure services an automatically managed identity in Azure Active Directory (Azure AD). You can use this identity to authenticate to any service that supports Azure AD authentication, including Key Vault, without having to display credentials in your code.
+[Azure Key Vault](./overview.md) provides a way to store credentials and other secrets with increased security. But your code needs to authenticate to Key Vault to retrieve them. [Managed identities for Azure resources](../../active-directory/managed-identities-azure-resources/overview.md) help to solve this problem by giving Azure services an automatically managed identity in Microsoft Entra ID. You can use this identity to authenticate to any service that supports Microsoft Entra authentication, including Key Vault, without having to display credentials in your code.
 
 In this tutorial, you'll create and deploy Azure web application to [Azure App Service](../../app-service/overview.md). You'll  use a managed identity to authenticate your Azure web app with an Azure key vault using [Azure Key Vault secret client library for .NET](/dotnet/api/overview/azure/key-vault) and the [Azure CLI](/cli/azure/get-started-with-azure-cli). The same basic principles apply when you use the development language of your choice, Azure PowerShell, and/or the Azure portal.
 
@@ -39,7 +35,7 @@ To complete this tutorial, you need:
 * [Azure Key Vault.](./overview.md) You can create a key vault by using the [Azure portal](quick-create-portal.md), the [Azure CLI](quick-create-cli.md), or [Azure PowerShell](quick-create-powershell.md).
 * A Key Vault [secret](../secrets/about-secrets.md). You can create a secret by using the [Azure portal](../secrets/quick-create-portal.md), [PowerShell](../secrets/quick-create-powershell.md), or the [Azure CLI](../secrets/quick-create-cli.md).
 
-If you already have your web application deployed in Azure App Service, you can skip to [configure web app access to a key vault](#create-and-assign-a-managed-identity) and [modify web application code](#modify-the-app-to-access-your-key-vault) sections.
+If you already have your web application deployed in Azure App Service, you can skip to [configure web app access to a key vault](#configure-the-web-app-to-connect-to-key-vault) and [modify web application code](#modify-the-app-to-access-your-key-vault) sections.
 
 ## Create a .NET Core app
 In this step, you'll set up the local .NET Core project.
@@ -234,12 +230,12 @@ http://<your-webapp-name>.azurewebsites.net
 You'll see the "Hello World!" message you saw earlier when you visited `http://localhost:5000`.
 
 For more information about deploying web application using Git, see [Local Git deployment to Azure App Service](../../app-service/deploy-local-git.md)
- 
+
 ## Configure the web app to connect to Key Vault
 
 In this section, you'll configure web access to Key Vault and update your application code to retrieve a secret from Key Vault.
 
-### Create and assign a managed identity
+### Create and assign access to a managed identity
 
 In this tutorial, we'll use [managed identity](../../active-directory/managed-identities-azure-resources/overview.md) to authenticate to Key Vault. Managed identity automatically manages application credentials.
 
@@ -259,13 +255,7 @@ The command will return this JSON snippet:
 }
 ```
 
-To give your web app permission to do **get** and **list** operations on your key vault, pass the `principalId` to the Azure CLI [az keyvault set-policy](/cli/azure/keyvault?#az-keyvault-set-policy) command:
-
-```azurecli-interactive
-az keyvault set-policy --name "<your-keyvault-name>" --object-id "<principalId>" --secret-permissions get list
-```
-
-You can also assign access policies by using the [Azure portal](./assign-access-policy-portal.md) or [PowerShell](./assign-access-policy-powershell.md).
+[!INCLUDE [Using RBAC to provide access to a key vault](../includes/key-vault-quickstart-rbac.md)]
 
 ### Modify the app to access your key vault
 
@@ -292,7 +282,7 @@ using Azure.Security.KeyVault.Secrets;
 using Azure.Core;
 ```
 
-Add the following lines before the `app.UseEndpoints` call (.NET 5.0 or earlier) or `app.MapGet` call (.NET 6.0) , updating the URI to reflect the `vaultUri` of your key vault. This code uses  [DefaultAzureCredential()](/dotnet/api/azure.identity.defaultazurecredential) to authenticate to Key Vault, which uses a token from managed identity to authenticate. For more information about authenticating to Key Vault, see the [Developer's Guide](./developers-guide.md#authenticate-to-key-vault-in-code). The code also uses exponential backoff for retries in case Key Vault is being throttled. For more information about Key Vault transaction limits, see [Azure Key Vault throttling guidance](./overview-throttling.md).
+Add the following lines before the `app.UseEndpoints` call (.NET 5.0 or earlier) or `app.MapGet` call (.NET 6.0), updating the URI to reflect the `vaultUri` of your key vault. This code uses  [DefaultAzureCredential()](/dotnet/api/azure.identity.defaultazurecredential) to authenticate to Key Vault, which uses a token from managed identity to authenticate. For more information about authenticating to Key Vault, see the [Developer's Guide](./developers-guide.md#authenticate-to-key-vault-in-code). The code also uses exponential backoff for retries in case Key Vault is being throttled. For more information about Key Vault transaction limits, see [Azure Key Vault throttling guidance](./overview-throttling.md).
 
 ```csharp
 SecretClientOptions options = new SecretClientOptions()

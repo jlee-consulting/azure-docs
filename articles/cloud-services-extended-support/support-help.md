@@ -5,7 +5,7 @@ author: mimckitt
 ms.author: mimckitt
 ms.service: cloud-services-extended-support
 ms.topic: troubleshooting
-ms.date: 4/28/2021
+ms.date: 07/24/2024
 ms.custom: support-help-page
 ---
 
@@ -15,7 +15,7 @@ Here are suggestions for where you can get help when developing your Azure Cloud
 
 ## Self help troubleshooting
 
-For common issues and and workarounds, see [Azure Cloud Services troubleshooting documentation](/troubleshoot/azure/cloud-services/welcome-cloud-services) and [Frequently asked questions](faq.yml)
+For common issues and workarounds, see [Azure Cloud Services troubleshooting documentation](/troubleshoot/azure/cloud-services/welcome-cloud-services) and [Frequently asked questions](faq.yml)
 
 
 ## Post a question on Microsoft Q&A

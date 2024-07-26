@@ -5,7 +5,7 @@ author: vgorbenko
 services: azure-monitor  
 ms.topic: reference
 ms.date: 07/03/2019    
-ms.author: vitalyg
+ms.reviewer: vitalyg
 ---
 
 # Application Insights log-based metrics
@@ -13,15 +13,15 @@ ms.author: vitalyg
 Application Insights log-based metrics let you analyze the health of your monitored apps, create powerful dashboards, and configure alerts. There are two kinds of metrics:
 
 * [Log-based metrics](../app/pre-aggregated-metrics-log-metrics.md#log-based-metrics) behind the scene are translated into [Kusto queries](/azure/kusto/query/) from stored events.
-* [Standard metrics](../app/pre-aggregated-metrics-log-metrics.md#pre-aggregated-metrics) are stored as pre-aggregated time series.
+* [Standard metrics](../app/pre-aggregated-metrics-log-metrics.md#preaggregated-metrics) are stored as preaggregated time series.
 
-Since *standard metrics* are pre-aggregated during collection, they have better performance at query time. This makes them a better choice for dashboarding and in real-time alerting. The *log-based metrics* have more dimensions, which makes them the superior option for data analysis and ad-hoc diagnostics. Use the [namespace selector](./metrics-getting-started.md#create-your-first-metric-chart) to switch between log-based and standard metrics in [metrics explorer](./metrics-getting-started.md).
+Since *standard metrics* are preaggregated during collection, they have better performance at query time. This makes them a better choice for dashboarding and in real-time alerting. The *log-based metrics* have more dimensions, which makes them the superior option for data analysis and ad-hoc diagnostics. Use the [namespace selector](./metrics-store-custom-rest-api.md#namespace) to switch between log-based and standard metrics in [metrics explorer](./analyze-metrics.md).
 
 ## Interpret and use queries from this article
 
 This article lists metrics with supported aggregations and dimensions. The details about log-based metrics include the underlying Kusto query statements. For convenience, each query uses defaults for time granularity, chart type, and sometimes splitting dimension which simplifies using the query in Log Analytics without any need for modification.
 
-When you plot the same metric in [metrics explorer](./metrics-getting-started.md), there are no defaults - the query is dynamically adjusted based on your chart settings:
+When you plot the same metric in [metrics explorer](./analyze-metrics.md), there are no defaults - the query is dynamically adjusted based on your chart settings:
 
 - The selected **Time range** is translated into an additional *where timestamp...* clause to only pick the events from selected time range. For example, a chart showing data for the most recent 24 hours, the query includes *| where timestamp > ago(24 h)*.
 
@@ -36,7 +36,7 @@ When you plot the same metric in [metrics explorer](./metrics-getting-started.md
 
 ## Availability metrics
 
-Metrics in the Availability category enable you to see the health of your web application as observed from points around the world. [Configure the availability tests](../app/monitor-web-app-availability.md) to start using any metrics from this category.
+Metrics in the Availability category enable you to see the health of your web application as observed from points around the world. [Configure the availability tests](/previous-versions/azure/azure-monitor/app/monitor-web-app-availability) to start using any metrics from this category.
 
 ### Availability (availabilityResults/availabilityPercentage)
 The *Availability* metric shows the percentage of the web test runs that didn't detect any issues. The lowest possible value is 0, which indicates that all of the web test runs have failed. The value of 100 means that all of the web test runs passed the validation criteria.
@@ -53,7 +53,7 @@ availabilityResults
 
 ### Availability test duration (availabilityResults/duration)
 
-The *Availability test duration* metric shows how much time it took for the web test to run. For the [multi-step web tests](../app/availability-multistep.md), the metric reflects the total execution time of all steps.
+The *Availability test duration* metric shows how much time it took for the web test to run. For the [multi-step web tests](/previous-versions/azure/azure-monitor/app/availability-multistep), the metric reflects the total execution time of all steps.
 
 |Unit of measure|Supported aggregations|Supported dimensions|
 |---|---|---|---|---|---|
@@ -92,7 +92,7 @@ Browser metrics are collected by the Application Insights JavaScript SDK from re
 
 Time from user request until DOM, stylesheets, scripts and images are loaded.
 
-|Unit of measure|Supported aggregations|Pre-aggregated dimensions|
+|Unit of measure|Supported aggregations|Preaggregated dimensions|
 |---|---|---|
 |Milliseconds|Average, Min, Max|None|
 
@@ -110,7 +110,7 @@ browserTimings
 
 Time between receiving the last byte of a document until the DOM is loaded. Async requests may still be processing.
 
-|Unit of measure|Supported aggregations|Pre-aggregated dimensions|
+|Unit of measure|Supported aggregations|Preaggregated dimensions|
 |---|---|---|
 |Milliseconds|Average, Min, Max|None|
 
@@ -128,7 +128,7 @@ browserTimings
 
 Time between user request and network connection. Includes DNS lookup and transport connection.
 
-|Unit of measure|Supported aggregations|Pre-aggregated dimensions|
+|Unit of measure|Supported aggregations|Preaggregated dimensions|
 |---|---|---|
 |Milliseconds|Average, Min, Max|None|
 
@@ -146,7 +146,7 @@ browserTimings
 
 Time between the first and last bytes, or until disconnection.
 
-|Unit of measure|Supported aggregations|Pre-aggregated dimensions|
+|Unit of measure|Supported aggregations|Preaggregated dimensions|
 |---|---|---|
 |Milliseconds|Average, Min, Max|None|
 
@@ -164,7 +164,7 @@ browserTimings
 
 Time between network connection and receiving the first byte.
 
-|Unit of measure|Supported aggregations|Pre-aggregated dimensions|
+|Unit of measure|Supported aggregations|Preaggregated dimensions|
 |---|---|---|
 |Milliseconds|Average, Min, Max|None|
 
@@ -186,7 +186,7 @@ The metrics in **Failures** show problems with processing requests, dependency c
 
 This metric reflects the number of thrown exceptions from your application code running in browser. Only exceptions that are tracked with a ```trackException()``` Application Insights API call are included in the metric.
 
-|Unit of measure|Supported aggregations|Pre-aggregated dimensions|Notes|
+|Unit of measure|Supported aggregations|Preaggregated dimensions|Notes|
 |---|---|---|---|
 |Count|Count|None|Log-based version uses **Sum** aggregation|
 
@@ -201,7 +201,7 @@ exceptions
 
 The number of failed dependency calls.
 
-|Unit of measure|Supported aggregations|Pre-aggregated dimensions|Notes|
+|Unit of measure|Supported aggregations|Preaggregated dimensions|Notes|
 |---|---|---|---|
 |Count|Count|None|Log-based version uses **Sum** aggregation|
 
@@ -216,7 +216,7 @@ dependencies
 
 Each time when you log an exception to Application Insights, there is a call to the [trackException() method](../app/api-custom-events-metrics.md#trackexception) of the SDK. The Exceptions metric shows the number of logged exceptions.
 
-|Unit of measure|Supported aggregations|Pre-aggregated dimensions|Notes|
+|Unit of measure|Supported aggregations|Preaggregated dimensions|Notes|
 |---|---|---|---|
 |Count|Count|Cloud role name, Cloud role instance, Device type|Log-based version uses **Sum** aggregation|
 
@@ -230,7 +230,7 @@ exceptions
 
 The count of tracked server requests that were marked as *failed*. By default, the Application Insights SDK automatically marks each server request that returned HTTP response code 5xx or 4xx as a failed request. You can customize this logic by modifying  *success* property of request telemetry item in a [custom telemetry initializer](../app/api-filtering-sampling.md#addmodify-properties-itelemetryinitializer).
 
-|Unit of measure|Supported aggregations|Pre-aggregated dimensions|Notes|
+|Unit of measure|Supported aggregations|Preaggregated dimensions|Notes|
 |---|---|---|---|
 |Count|Count|Cloud role instance, Cloud role name, Real or synthetic traffic, Request performance, Response code|Log-based version uses **Sum** aggregation|
 
@@ -245,7 +245,7 @@ requests
 
 This metric shows the number of server exceptions.
 
-|Unit of measure|Supported aggregations|Pre-aggregated dimensions|Notes|
+|Unit of measure|Supported aggregations|Preaggregated dimensions|Notes|
 |---|---|---|---|
 |Count|Count|Cloud role name, Cloud role instance|Log-based version uses **Sum** aggregation|
 

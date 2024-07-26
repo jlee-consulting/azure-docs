@@ -2,24 +2,20 @@
 title: Hyperparameter tuning a model (v2)
 titleSuffix: Azure Machine Learning
 description: Automate hyperparameter tuning for deep learning and machine learning models using Azure Machine Learning.
-ms.author: amipatel
-author: amibp
+ms.author: ssalgado
+author: ssalgadodev
+ms.reviewer: amipatel
 services: machine-learning
 ms.service: machine-learning
-ms.subservice: core
-ms.date: 05/02/2022
+ms.subservice: training
+ms.date: 06/25/2024
 ms.topic: how-to
-ms.custom: devx-track-python, contperf-fy21q1, event-tier1-build-2022
 ---
 
 # Hyperparameter tuning a model (v2)
 
-[!INCLUDE [cli v2](../../includes/machine-learning-cli-v2.md)]
-[!INCLUDE [sdk v2](../../includes/machine-learning-sdk-v2.md)]
+[!INCLUDE [dev v2](includes/machine-learning-dev-v2.md)]
 
-> [!div class="op_single_selector" title1="Select the version of Azure Machine Learning CLI extension you are using:"]
-> * [v1](v1/how-to-tune-hyperparameters-v1.md)
-> * [v2 (current version)](how-to-tune-hyperparameters.md)
 
 Automate efficient hyperparameter tuning using Azure Machine Learning SDK v2 and CLI v2 by way of the SweepJob type. 
 
@@ -237,7 +233,7 @@ mlflow.log_metric("accuracy", float(val_accuracy))
 
 The training script calculates the `val_accuracy` and logs it as the primary metric "accuracy". Each time the metric is logged, it's received by the hyperparameter tuning service. It's up to you to determine the frequency of reporting.
 
-For more information on logging values for training jobs, see [Enable logging in Azure ML training jobs](how-to-log-view-metrics.md).
+For more information on logging values for training jobs, see [Enable logging in Azure Machine Learning training jobs](how-to-log-view-metrics.md).
 
 ## <a name="early-termination"></a> Specify early termination policy
 
@@ -294,7 +290,7 @@ In this example, the early termination policy is applied at every interval start
 
 ### Truncation selection policy
 
-[Truncation selection](/python/api/azure-ai-ml/azure.ai.ml.sweep.truncationselectionpolicy) cancels a percentage of lowest performing jobs at each evaluation interval. jobs are compared using the primary metric. 
+[Truncation selection](/python/api/azure-ai-ml/azure.ai.ml.sweep.truncationselectionpolicy) cancels a percentage of lowest performing jobs at each evaluation interval. Jobs are compared using the primary metric. 
 
 This policy takes the following configuration parameters:
 
@@ -313,7 +309,7 @@ In this example, the early termination policy is applied at every interval start
 
 ### No termination policy (default)
 
-If no policy is specified, the hyperparameter tuning service will let all training jobs execute to completion.
+If no policy is specified, the hyperparameter tuning service lets all training jobs execute to completion.
 
 ```Python
 sweep_job.early_termination = None
@@ -329,12 +325,12 @@ sweep_job.early_termination = None
 Control your resource budget by setting limits for your sweep job.
 
 * `max_total_trials`: Maximum number of trial jobs. Must be an integer between 1 and 1000.
-* `max_concurrent_trials`: (optional) Maximum number of trial jobs that can run concurrently. If not specified, all jobs launch in parallel. If specified, must be an integer between 1 and 100.
-* `timeout`: Maximum time in seconds the entire sweep job is allowed to run. Once this limit is reached the system will cancel the sweep job, including all its trials.
-* `trial_timeout`: Maximum time in seconds each trial job is allowed to run. Once this limit is reached the system will cancel the trial. 
+* `max_concurrent_trials`: (optional) Maximum number of trial jobs that can run concurrently. If not specified, max_total_trials number of jobs launch in parallel. If specified, must be an integer between 1 and 1000.
+* `timeout`: Maximum time in seconds the entire sweep job is allowed to run. Once this limit is reached the system cancels the sweep job, including all its trials.
+* `trial_timeout`: Maximum time in seconds each trial job is allowed to run. Once this limit is reached the system cancels the trial. 
 
 >[!NOTE] 
->If both max_total_trials and max_concurrent_trials are specified, the hyperparameter tuning experiment terminates when the first of these two thresholds is reached.
+>If both max_total_trials and timeout are specified, the hyperparameter tuning experiment terminates when the first of these two thresholds is reached.
 
 >[!NOTE] 
 >The number of concurrent trial jobs is gated on the resources available in the specified compute target. Ensure that the compute target has the available resources for the desired concurrency.
@@ -343,7 +339,7 @@ Control your resource budget by setting limits for your sweep job.
 sweep_job.set_limits(max_total_trials=20, max_concurrent_trials=4, timeout=1200)
 ```
 
-This code configures the hyperparameter tuning experiment to use a maximum of 20 total trial jobs, running four trial jobs at a time with a timeout of 1200 seconds for the entire sweep job.
+This code configures the hyperparameter tuning experiment to use a maximum of 20 total trial jobs, running four trial jobs at a time with a timeout of 1,200 seconds for the entire sweep job.
 
 ## Configure hyperparameter tuning experiment
 
@@ -413,7 +409,7 @@ sweep_job.early_termination = MedianStoppingPolicy(
 )
 ```
 
-The `command_job` is called as a function so we can apply the parameter expressions to the sweep inputs. The `sweep` function is then configured with `trial`, `sampling-algorithm`, `objective`, `limits`, and `compute`. The above code snippet is taken from the sample notebook [Run hyperparameter sweep on a Command or CommandComponent](https://github.com/Azure/azureml-examples/blob/main/sdk/python/jobs/single-step/lightgbm/iris/lightgbm-iris-sweep.ipynb). In this sample, the `learning_rate` and `boosting` parameters will be tuned. Early stopping of jobs will be determined by a `MedianStoppingPolicy`, which stops a job whose primary metric value is worse than the median of the averages across all training jobs.(see [MedianStoppingPolicy class reference](/python/api/azure-ai-ml/azure.ai.ml.sweep.medianstoppingpolicy)).
+The `command_job` is called as a function so we can apply the parameter expressions to the sweep inputs. The `sweep` function is then configured with `trial`, `sampling-algorithm`, `objective`, `limits`, and `compute`. The above code snippet is taken from the sample notebook [Run hyperparameter sweep on a Command or CommandComponent](https://github.com/Azure/azureml-examples/blob/main/sdk/python/jobs/single-step/lightgbm/iris/lightgbm-iris-sweep.ipynb). In this sample, the `learning_rate` and `boosting` parameters are tuned. Early stopping of jobs are determined by a `MedianStoppingPolicy`, which stops a job whose primary metric value is worse than the median of the averages across all training jobs.(see [MedianStoppingPolicy class reference](/python/api/azure-ai-ml/azure.ai.ml.sweep.medianstoppingpolicy)).
 
 To see how the parameter values are received, parsed, and passed to the training script to be tuned, refer to this [code sample](https://github.com/Azure/azureml-examples/blob/main/sdk/python/jobs/single-step/lightgbm/iris/src/main.py)
 
@@ -440,7 +436,7 @@ You can visualize all of your hyperparameter tuning jobs in the [Azure Machine L
 
     :::image type="content" source="media/how-to-tune-hyperparameters/hyperparameter-tuning-metrics.png" alt-text="Hyperparameter tuning metrics chart":::
 
-- **Parallel Coordinates Chart**: This visualization shows the correlation between primary metric performance and individual hyperparameter values. The chart is interactive via movement of axes (click and drag by the axis label), and by highlighting values across a single axis (click and drag vertically along a single axis to highlight a range of desired values). The parallel coordinates chart includes an axis on the rightmost portion of the chart that plots the best metric value corresponding to the hyperparameters set for that job instance. This axis is provided in order to project the chart gradient legend onto the data in a more readable fashion.
+- **Parallel Coordinates Chart**: This visualization shows the correlation between primary metric performance and individual hyperparameter values. The chart is interactive via movement of axes (select and drag by the axis label), and by highlighting values across a single axis (select and drag vertically along a single axis to highlight a range of desired values). The parallel coordinates chart includes an axis on the rightmost portion of the chart that plots the best metric value corresponding to the hyperparameters set for that job instance. This axis is provided in order to project the chart gradient legend onto the data in a more readable fashion.
 
     :::image type="content" source="media/how-to-tune-hyperparameters/hyperparameter-tuning-parallel-coordinates.png" alt-text="Hyperparameter tuning parallel coordinates chart":::
 
@@ -448,7 +444,7 @@ You can visualize all of your hyperparameter tuning jobs in the [Azure Machine L
 
     :::image type="content" source="media/how-to-tune-hyperparameters/hyperparameter-tuning-2-dimensional-scatter.png" alt-text="Hyparameter tuning 2-dimensional scatter chart":::
 
-- **3-Dimensional Scatter Chart**: This visualization is the same as 2D but allows for three hyperparameter dimensions of correlation with the primary metric value. You can also click and drag to reorient the chart to view different correlations in 3D space.
+- **3-Dimensional Scatter Chart**: This visualization is the same as 2D but allows for three hyperparameter dimensions of correlation with the primary metric value. You can also select and drag to reorient the chart to view different correlations in 3D space.
 
     :::image type="content" source="media/how-to-tune-hyperparameters/hyperparameter-tuning-3-dimensional-scatter.png" alt-text="Hyparameter tuning 3-dimensional scatter chart":::
 
@@ -479,4 +475,4 @@ az ml job download --name <sweep-job> --output-name model
 
 ## Next steps
 * [Track an experiment](how-to-log-view-metrics.md)
-* [Deploy a trained model](how-to-deploy-managed-online-endpoints.md)
+* [Deploy a trained model](how-to-deploy-online-endpoints.md)

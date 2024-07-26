@@ -4,7 +4,7 @@ description: Learn how to troubleshoot common issues
 author: vicancy
 ms.service: signalr
 ms.topic: how-to
-ms.date: 07/18/2022
+ms.date: 07/02/2024
 ms.author: lianwei
 ms.devlang: csharp
 ---
@@ -164,9 +164,9 @@ For **Standard** instances, **concurrent** connection count limit **per unit** i
 
 The connections include both client and server connections. check [here](./signalr-concept-messages-and-connections.md#how-connections-are-counted) for how connections are counted.
 
-### Too many negotiate requests at the same time
+### NegotiateThrottled
 
-We suggest having a random delay before reconnecting, check [here](#restart_connection) for retry samples.
+When there are too many client negotiate requests at the **same** time, it may get throttled. The limit relates to the unit counts that more units has a higher limit. Besides, we suggest having a random delay before reconnecting, check [here](#restart_connection) for retry samples.
 
 [Having issues or feedback about the troubleshooting? Let us know.](https://aka.ms/asrs/survey/troubleshooting)
 
@@ -242,7 +242,7 @@ When the client is connected to the Azure SignalR, the persistent connection bet
 ### Possible errors seen from the client side
 
 * `The remote party closed the WebSocket connection without completing the close handshake`
-* `Service timeout. 30.00ms elapsed without receiving a message from service.`
+* `Service timeout. 30000.00ms elapsed without receiving a message from service.`
 * `{"type":7,"error":"Connection closed with an error."}`
 * `{"type":7,"error":"Internal server error."}`
 
@@ -332,7 +332,7 @@ This section describes several possibilities leading to server connection drop, 
 
 * `[Error]Connection "..." to the service was dropped`
 * `The remote party closed the WebSocket connection without completing the close handshake`
-* `Service timeout. 30.00ms elapsed without receiving a message from service.`
+* `Service timeout. 30000.00ms elapsed without receiving a message from service.`
 
 ### Root cause
 
@@ -389,7 +389,7 @@ public class ThreadPoolStarvationDetector : EventListener
     {
         // See: https://learn.microsoft.com/dotnet/framework/performance/thread-pool-etw-events#threadpoolworkerthreadadjustmentadjustment
         if (eventData.EventId == EventIdForThreadPoolWorkerThreadAdjustmentAdjustment &&
-            eventData.Payload[3] as uint? == ReasonForStarvation)
+            eventData.Payload[2] as uint? == ReasonForStarvation)
         {
             _logger.LogWarning("Thread pool starvation detected!");
         }
@@ -447,7 +447,7 @@ Here are the [Sample codes](https://github.com/Azure/azure-signalr/tree/dev/samp
 
 * [ASP.NET Core C# Client](https://github.com/Azure/azure-signalr/tree/dev/samples/ChatSample/ChatSample.CSharpClient/Program.cs#L64)
 
-* [ASP.NET Core JavaScript Client](https://github.com/Azure/azure-signalr/blob/dev/samples/ChatSample/ChatSample.Net50/wwwroot/index.html#L171)
+* [ASP.NET Core JavaScript Client](https://github.com/Azure/azure-signalr/blob/dev/samples/ChatSample/ChatSample.Net70/wwwroot/js/chat.js)
 
 * [ASP.NET C# Client](https://github.com/Azure/azure-signalr/tree/dev/samples/AspNet.ChatSample/AspNet.ChatSample.CSharpClient/Program.cs#L78)
 

@@ -12,7 +12,7 @@ ms.date: 10/12/2022
 
 # Azure Cosmos DB for MongoDB (3.2 version): supported features and syntax
 
-[!INCLUDE[MongoDB](../includes/appliesto-mongodb.md)]
+[!INCLUDE[MongoDB](~/reusable-content/ce-skilling/azure/includes/cosmos-db/includes/appliesto-mongodb.md)]
 
 Azure Cosmos DB is Microsoft's globally distributed multi-model database service. You can communicate with the Azure Cosmos DB for MongoDB using any of the open-source MongoDB client [drivers](https://docs.mongodb.org/ecosystem/drivers). The Azure Cosmos DB for MongoDB enables the use of existing client drivers by adhering to the MongoDB [wire protocol](https://docs.mongodb.org/manual/reference/mongodb-wire-protocol).
 
@@ -340,7 +340,7 @@ Unique indexes are available for all Azure Cosmos DB accounts using Azure Cosmos
 
 ## Time-to-live (TTL)
 
-Azure Cosmos DB supports a time-to-live (TTL) based on the timestamp of the document. TTL can be enabled for collections by going to the [Azure portal](https://portal.azure.com).
+Azure Cosmos DB only supports a time-to-live (TTL) at the collection level (_ts) in version 3.2. Upgrade to versions 3.6+ to take advantage of other forms of [TTL](time-to-live.md).  
 
 ## User and role management
 

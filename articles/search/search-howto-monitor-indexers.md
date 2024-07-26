@@ -1,17 +1,20 @@
 ---
 title: Monitor indexer status and results
-titleSuffix: Azure Cognitive Search
-description: Monitor the status, progress, and results of Azure Cognitive Search indexers in the Azure portal, using the REST API, or the .NET SDK.
+titleSuffix: Azure AI Search
+description: Monitor the status, progress, and results of Azure AI Search indexers in the Azure portal, using the REST API, or the Azure SDKs.
 
 manager: nitinme
 author: HeidiSteen
 ms.author: heidist
 ms.service: cognitive-search
+ms.custom:
+  - devx-track-dotnet
+  - ignite-2023
 ms.topic: conceptual
-ms.date: 09/15/2022
+ms.date: 06/25/2024
 ---
 
-# Monitor indexer status and results in Azure Cognitive Search
+# Monitor indexer status and results in Azure AI Search
 
 You can monitor indexer processing in the Azure portal, or programmatically through REST calls or an Azure SDK. In addition to status about the indexer itself, you can review start and end times, and detailed errors and warnings from a particular run.
 
@@ -42,22 +45,17 @@ If there were document-specific problems during the run, they'll be listed in th
 
    ![Indexer details with errors](media/search-monitor-indexers/indexer-execution-error.png "Indexer details with errors")
 
-Warnings are common with some types of indexers, and don't always indicate a problem. For example indexers that use Cognitive Services can report warnings when image or PDF files don't contain any text to process. 
+Warnings are common with some types of indexers, and don't always indicate a problem. For example indexers that use Azure AI services can report warnings when image or PDF files don't contain any text to process. 
 
 For more information about investigating indexer errors and warnings, see [Indexer troubleshooting guidance](search-indexer-troubleshooting.md).
 
 ## Monitor with Azure Monitoring Metrics
 
-Cognitive Search is a monitored resource in Azure Monitor, which means that you can use [Metrics Explorer](../azure-monitor/essentials/data-platform-metrics.md#metrics-explorer) to see basic metrics about the number of indexer-processed documents and skill invocations. These metrics can be used to monitor indexer progress and [set up alerts](../azure-monitor/alerts/alerts-metric-overview.md). 
+Azure AI Search is a monitored resource in Azure Monitor, which means that you can use [Metrics Explorer](../azure-monitor/essentials/data-platform-metrics.md#metrics-explorer) to see basic metrics about the number of indexer-processed documents and skill invocations. These metrics can be used to monitor indexer progress and [set up alerts](../azure-monitor/alerts/alerts-metric-overview.md).
 
-Metric views can be filtered or split up by a set of predefined dimensions.
+Metric views can be filtered or split up by a set of predefined dimensions. To learn about the dimensions associated with the metrics *Document processed count* and *Skill execution invocation count*, see [Metric dimensions](monitor-azure-cognitive-search-data-reference.md#metric-dimensions).
 
-| Metric Name  |  Description | Dimensions  | Sample use cases |
-|---|---|---|---|
-| Document processed count  | Shows the number of indexer processed documents.  | Data source name, failed, index name, indexer name, skillset name  | <br> - Can be referenced as a rough measure of throughput (number of documents processed by indexer over time) <br> - Set up to alert on failed documents | 
-|  Skill execution invocation count | Shows the number of skill invocations. | Data source name, failed, index name, indexer name, skill name, skill type, skillset name | <br> - Reference to ensure skills are invoked as expected by comparing relative invocation numbers between skills and number of skill invocations to the number of documents. <br> - Set up to alert on failed skill invocations |
-
-The screenshot below shows the number of documents processed by indexers within a service over an hour, split up by indexer name.
+The following screenshot shows the number of documents processed by indexers within a service over an hour, split up by indexer name.
 
    ![Indexer documents processed metric](media/search-monitor-indexers/indexers-documents-processed-metric.png "Indexer documents processed metric")
 
@@ -68,10 +66,10 @@ You can also configure the graph to see the number of skill invocations over the
 
 ## Monitor using Get Indexer Status (REST API)
 
-You can retrieve the status and execution history of an indexer using the [Get Indexer Status command](/rest/api/searchservice/get-indexer-status):
+You can retrieve the status and execution history of an indexer using the [Get Indexer Status command](/rest/api/searchservice/indexers/get-status):
 
 ```http
-GET https://[service name].search.windows.net/indexers/[indexer name]/status?api-version=2020-06-30
+GET https://[service name].search.windows.net/indexers/[indexer name]/status?api-version=2023-11-01
 api-key: [Search service admin key]
 ```
 
@@ -113,11 +111,11 @@ Each run of the indexer also has its own status that indicates whether that spec
 
 When an indexer is reset to refresh its change tracking state, a separate execution history entry is added with a **Reset** status.
 
-For more information about status codes and indexer monitoring data, see [Get Indexer Status](/rest/api/searchservice/get-indexer-status).
+For more information about status codes and indexer monitoring data, see [Get Indexer Status](/rest/api/searchservice/indexers/get-status).
 
 ## Monitor using .NET
 
-Using the Azure Cognitive Search .NET SDK, the following C# example writes information about an indexer's status and the results of its most recent (or ongoing) run to the console.
+The following C# example writes information about an indexer's status and the results of its most recent (or ongoing) run to the console.
 
 ```csharp
 static void CheckIndexerStatus(SearchIndexerClient indexerClient, SearchIndexer indexer)
@@ -173,7 +171,7 @@ When an indexer is reset to refresh its change tracking state, a separate histor
 
 For more information about status codes and indexer monitoring information, see the following API reference:
 
-* [GetIndexerStatus (REST API)](/rest/api/searchservice/get-indexer-status)
+* [Indexers - Get Status (REST API)](/rest/api/searchservice/indexers/get-status)
 * [IndexerStatus](/dotnet/api/azure.search.documents.indexes.models.indexerstatus)
 * [IndexerExecutionStatus](/dotnet/api/azure.search.documents.indexes.models.indexerexecutionstatus)
 * [IndexerExecutionResult](/dotnet/api/azure.search.documents.indexes.models.indexerexecutionresult)

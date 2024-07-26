@@ -1,13 +1,12 @@
 ---
-title: Use Azure Spot Virtual Machines 
+title: Use Azure Spot Virtual Machines
 description: Learn how to use Azure Spot Virtual Machines to save on costs.
 author: ju-shim
 ms.author: jushiman
 ms.service: virtual-machines
 ms.subservice: spot
-ms.workload: infrastructure-services
 ms.topic: how-to
-ms.date: 8/30/2022
+ms.date: 06/14/2024
 ms.reviewer: cynthn
 ---
 
@@ -20,16 +19,17 @@ Using Azure Spot Virtual Machines allows you to take advantage of our unused cap
 
 The amount of available capacity can vary based on size, region, time of day, and more. When deploying Azure Spot Virtual Machines, Azure will allocate the VMs if there's capacity available, but there's no SLA for these VMs. An Azure Spot Virtual Machine offers no high availability guarantees. At any point in time when Azure needs the capacity back, the Azure infrastructure will evict Azure Spot Virtual Machines with 30-seconds notice. 
 
+:::image type="content" source="media/spot-vms/azure-spot-virtual-machines-thumbnail.jpg" alt-text="YouTube video about Spot VMs and reducing operational costs of stateless workloads." link="https://youtu.be/GFRA91FTqAE":::
 
 ## Eviction policy
 
-VMs can be evicted based on capacity or the max price you set. When creating an Azure Spot Virtual Machine, you can set the eviction policy to *Deallocate* (default) or *Delete*. 
+Spot VMs can be stopped if Azure needs capacity for other pay-as-you-go workloads or when the price of the spot instance exceeds the maximum price that you have set. When creating an Azure Spot Virtual Machine, you can set the eviction policy to *Deallocate* (default) or *Delete*. 
 
 The *Deallocate* policy moves your VM to the stopped-deallocated state, allowing you to redeploy it later. However, there's no guarantee that the allocation will succeed. The deallocated VMs will count against your quota and you'll be charged storage costs for the underlying disks. 
 
 If you would like your VM to be deleted when it's evicted, you can set the eviction policy to *delete*. The evicted VMs are deleted together with their underlying disks, so you'll not continue to be charged for the storage. 
 
-You can opt in to receive in-VM notifications through [Azure Scheduled Events](./linux/scheduled-events.md). This will notify you if your VMs are being evicted and you will have 30 seconds to finish any jobs and perform shutdown tasks prior to the eviction.
+You can opt in to receive in-VM notifications through [Azure Scheduled Events](./linux/scheduled-events.md). These are delivered on a best effort basis up to 30 seconds prior to the eviction.
 
 
 | Option | Outcome |
@@ -38,7 +38,7 @@ You can opt in to receive in-VM notifications through [Azure Scheduled Events](.
 | Max price is set to < the current price. | The VM isn't deployed. You'll get an error message that the max price needs to be >= current price. |
 | Restarting a stopped/deallocated VM if the max price is >= the current price | If there's capacity and quota, then the VM is deployed. |
 | Restarting a stopped/deallocated VM if the max price is < the current price | You'll get an error message that the max price needs to be >= current price. | 
-| Price for the VM has gone up and is now > the max price. | The VM gets evicted. You get a 30s notification before actual eviction. | 
+| Price for the VM has gone up and is now > the max price. | The VM gets evicted. Azure will attempt scheduled event delivery up to 30 seconds before actual eviction. | 
 | After eviction, the price for the VM goes back to being < the max price. | The VM won't be automatically restarted. You can restart the VM yourself, and it will be charged at the current price. |
 | If the max price is set to `-1` | The VM won't be evicted for pricing reasons. The max price will be the current price, up to the price for standard VMs. You'll never be charged above the standard price.| 
 | Changing the max price | You need to deallocate the VM to change the max price. Deallocate the VM, set a new max price, then update the VM. |
@@ -52,7 +52,7 @@ The following VM sizes aren't supported for Azure Spot Virtual Machines:
  - B-series
  - Promo versions of any size (like Dv2, NV, NC, H promo sizes)
 
-Azure Spot Virtual Machines can be deployed to any region, except Microsoft Azure China 21Vianet.
+Azure Spot Virtual Machines can be deployed to any region, except Microsoft Azure operated by 21Vianet.
 
 <a name="channel"></a>
 
@@ -60,7 +60,7 @@ The following [offer types](https://azure.microsoft.com/support/legal/offer-deta
 
 -	Enterprise Agreement 
 -	Pay-as-you-go offer code (003P)
--	Sponsored (0036P and 0136P)
+-	Sponsored (0036P and 0136P) - not available in Fairfax
 - For Cloud Service Provider (CSP), see the [Partner Center](/partner-center/azure-plan-get-started) or contact your partner directly.
 
 
@@ -76,15 +76,18 @@ With variable pricing, you have option to set a max price, in US dollars (USD), 
 
 ### Portal
 
-You can see historical pricing and eviction rates per size in a region in the portal. Select **View pricing history and compare prices in nearby regions** to see a table or graph of pricing for a specific size.  The pricing and eviction rates in the following images are only examples. 
+You can see historical pricing and eviction rates per size in a region in the portal while you are creating the VM. After selecting the checkbox to **Run with Azure Spot discount**, a link will appear under the size selection of the VM titled **View pricing history and compare prices in nearby regions**. By selecting that link you will be able to see a table or graph of spot pricing for the specified VM size.   The pricing and eviction rates in the following images are only examples. 
+
+> [!TIP]
+> Eviction rates are quoted _per hour_. For example, an eviction rate of 10% means a VM has a 10% chance of being evicted within the next hour, based on historical eviction data of the last 28 days.
 
 **Chart**:
 
-:::image type="content" source="./media/spot-chart.png" alt-text="Screenshot of the region options with the difference in pricing and eviction rates as a chart.":::
+:::image type="content" source="~/reusable-content/ce-skilling/azure/media/virtual-machines/spot-chart.png" alt-text="Screenshot of the region options with the difference in pricing and eviction rates as a chart.":::
 
 **Table**:
 
-:::image type="content" source="./media/spot-table.png" alt-text="Screenshot of the region options with the difference in pricing and eviction rates as a table.":::
+:::image type="content" source="~/reusable-content/ce-skilling/azure/media/virtual-machines/spot-table.png" alt-text="Screenshot of the region options with the difference in pricing and eviction rates as a table.":::
 
 ### Azure Resource Graph
 

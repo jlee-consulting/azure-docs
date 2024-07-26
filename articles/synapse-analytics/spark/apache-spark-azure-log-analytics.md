@@ -1,10 +1,9 @@
 ---
 title: Monitor Apache Spark applications with Azure Log Analytics
 description: Learn how to enable the Synapse Studio connector for collecting and sending the Apache Spark application metrics and logs to your Log Analytics workspace.
-services: synapse-analytics 
 author: jejiang
 ms.author: jejiang
-ms.reviewer: sngun 
+ms.reviewer: whhender 
 ms.service: synapse-analytics
 ms.topic: tutorial
 ms.subservice: spark
@@ -35,7 +34,7 @@ Use any of the following options to prepare the file.
 Copy the following Apache Spark configuration, save it as *spark_loganalytics_conf.txt*, and fill in the following parameters:
 
    - `<LOG_ANALYTICS_WORKSPACE_ID>`: Log Analytics workspace ID.
-   - `<LOG_ANALYTICS_WORKSPACE_KEY>`: Log Analytics key. To find this, in the Azure portal, go to **Azure Log Analytics workspace** > **Agents management** > **Primary key**.
+   - `<LOG_ANALYTICS_WORKSPACE_KEY>`: Log Analytics key. To find this, in the Azure portal, go to **Azure Log Analytics workspace** > **Agents** > **Primary key**.
 
 ```properties
 spark.synapse.logAnalytics.enabled true
@@ -101,28 +100,7 @@ spark.synapse.logAnalytics.keyVault.key.secret <AZURE_KEY_VAULT_SECRET_KEY_NAME>
 spark.synapse.logAnalytics.keyVault.linkedServiceName <LINKED_SERVICE_NAME>
 ```
 
-#### Available Apache Spark configuration
-
-| Configuration name | Default value | Description |
-| ------------------ | ------------- | ----------- |
-| spark.synapse.logAnalytics.enabled | false | To enable the Log Analytics sink for the Spark applications, true. Otherwise, false. |
-| spark.synapse.logAnalytics.workspaceId | - | The destination Log Analytics workspace ID. |
-| spark.synapse.logAnalytics.secret | - | The destination Log Analytics workspace secret. |
-| spark.synapse.logAnalytics.keyVault.linkedServiceName   | - | The Key Vault linked service name for the Log Analytics workspace ID and key. |
-| spark.synapse.logAnalytics.keyVault.name | - | The Key Vault name for the Log Analytics ID and key. |
-| spark.synapse.logAnalytics.keyVault.key.workspaceId | SparkLogAnalyticsWorkspaceId | The Key Vault secret name for the Log Analytics workspace ID. |
-| spark.synapse.logAnalytics.keyVault.key.secret | SparkLogAnalyticsSecret | The Key Vault secret name for the Log Analytics workspace |
-| spark.synapse.logAnalytics.uriSuffix | ods.opinsights.azure.com | The destination Log Analytics workspace [URI suffix][uri_suffix]. If your workspace isn't in Azure global, you need to update the URI suffix according to the respective cloud. |
-| spark.synapse.logAnalytics.filter.eventName.match | - | Optional. The comma-separated spark event names, you can specify which events to collect. For example: `SparkListenerJobStart,SparkListenerJobEnd` |
-| spark.synapse.logAnalytics.filter.loggerName.match | - | Optional. The comma-separated log4j logger names, you can specify which logs to collect. For example: `org.apache.spark.SparkContext,org.example.Logger` |
-| spark.synapse.logAnalytics.filter.metricName.match | - | Optional. The comma-separated spark metric name suffixes, you can specify which metrics to collect. For example: `jvm.heap.used`|
-
-> [!NOTE]  
-> - For Azure China, the `spark.synapse.logAnalytics.uriSuffix` parameter should be `ods.opinsights.azure.cn`. 
-> - For Azure Government, the `spark.synapse.logAnalytics.uriSuffix` parameter should be `ods.opinsights.azure.us`. 
-
-[uri_suffix]: ../../azure-monitor/logs/data-collector-api.md#request-uri
-
+For a list of Apache Spark configurations, see [Available Apache Spark configurations](../monitor-synapse-analytics-reference.md#available-apache-spark-configurations)
 
 ### Step 3: Upload your Apache Spark configuration to an Apache Spark pool 
 
@@ -268,7 +246,7 @@ Users can query to evaluate metrics and logs at a set frequency, and fire an ale
 
 After the Synapse workspace is created with [data exfiltration protection](../security/workspace-data-exfiltration-protection.md) enabled.
 
-When you want to enable this feature, you need to create managed private endpoint connection requests to [Azure Monitor private link scopes (A M P L S)](../../azure-monitor/logs/private-link-security.md) in the workspace’s approved Azure AD tenants.
+When you want to enable this feature, you need to create managed private endpoint connection requests to [Azure Monitor private link scopes (A M P L S)](../../azure-monitor/logs/private-link-security.md) in the workspace’s approved Microsoft Entra tenants.
 
 You can follow below steps to create a managed private endpoint connection to Azure Monitor private link scopes (A M P L S):
 

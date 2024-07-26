@@ -2,14 +2,14 @@
 title: Manage keys in a managed HSM - Azure Key Vault | Microsoft Docs
 description: Use this article to manage keys in a managed HSM
 services: key-vault
-author: mbaldwin
+author: msmbaldwin
 
 ms.service: key-vault
 ms.subservice: managed-hsm
+ms.custom: devx-track-azurecli
 ms.topic: tutorial
-ms.date: 09/15/2020
+ms.date: 02/20/2024
 ms.author: mbaldwin
-
 ---
 
 # Manage a Managed HSM using the Azure CLI
@@ -29,7 +29,7 @@ To complete the steps in this article, you must have the following items:
 * The Azure CLI version 2.25.0 or later. Run `az --version` to find the version. If you need to install or upgrade, see [Install the Azure CLI]( /cli/azure/install-azure-cli).
 * A managed HSM in your subscription. See [Quickstart: Provision and activate a managed HSM using Azure CLI](quick-create-cli.md) to provision and activate a managed HSM.
 
-[!INCLUDE [cloud-shell-try-it.md](../../../includes/cloud-shell-try-it.md)]
+[!INCLUDE [cloud-shell-try-it.md](~/reusable-content/ce-skilling/azure/includes/cloud-shell-try-it.md)]
 
 ## Sign in to Azure
 
@@ -42,10 +42,10 @@ az login
 For more information on login options via the CLI, see [sign in with Azure CLI](/cli/azure/authenticate-azure-cli)
 
 > [!NOTE]
-> All the commands below show two usage methods. One using **--hsm-name** and **--name** (for key name) parameters and another using **--id** parameter where you can specify entire url including including key name where appropriate. The latter method is useful when the caller (a user or an application) has no read access on the control plane and only restricted access on the data plane.
+> All the commands below show two usage methods. One using **--hsm-name** and **--name** (for key name) parameters and another using **--id** parameter where you can specify the entire url including the key name where appropriate. The latter method is useful when the caller (a user or an application) has no read access on the control plane and only restricted access on the data plane.
 
 > [!NOTE]
-> Some interactions with key material require specific Local RBAC permissions. For a full list of of built-in Local RBAC roles and permissions, see [Managed HSM local RBAC built-in roles](./built-in-roles.md). To assign these permissions to a user, see [Secure access to your managed HSMs](./secure-your-managed-hsm.md)
+> Some interactions with key material require specific Local RBAC permissions. For a full list of built-in Local RBAC roles and permissions, see [Managed HSM local RBAC built-in roles](./built-in-roles.md). To assign these permissions to a user, see [Secure access to your managed HSMs](./secure-your-managed-hsm.md)
 ## Create an HSM key
 
 > [!NOTE]
@@ -215,7 +215,7 @@ az keyvault key restore --id https://ContosoMHSM.managedhsm.azure.net/deletedKey
 Use `az keyvault key import` command to import a key (only RSA and EC) from a file. The certificate file must have private key and must use PEM encoding (as defined in RFCs [1421](https://tools.ietf.org/html/rfc1421), [1422](https://tools.ietf.org/html/rfc1422), [1423](https://tools.ietf.org/html/rfc1423), [1424](https://tools.ietf.org/html/rfc1424)).
 
 ```azurecli-interactive
-az keyvault key import --hsm-name ContosoHSM --name myrsakey --pem-file mycert.key --password 'mypassword'
+az keyvault key import --hsm-name ContosoHSM --name myrsakey --pem-file mycert.key --pem-password 'mypassword'
 
 ## OR
 # Note the key name (myaeskey) in the URI

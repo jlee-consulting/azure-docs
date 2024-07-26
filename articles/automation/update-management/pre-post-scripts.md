@@ -3,7 +3,7 @@ title: Manage pre-scripts and post-scripts in your Update Management deployment 
 description: This article tells how to configure and manage pre-scripts and post-scripts for update deployments.
 services: automation
 ms.subservice: update-management
-ms.date: 09/16/2021
+ms.date: 07/15/2024
 ms.topic: conceptual 
 ms.custom: devx-track-azurepowershell
 ---
@@ -16,7 +16,7 @@ Pre-scripts and post-scripts are runbooks to run in your Azure Automation accoun
 
 For a runbook to be used as a pre-script or post-script, you must import it into your Automation account and [publish the runbook](../manage-runbooks.md#publish-a-runbook).
 
-Currently, only PowerShell and Python 2 runbooks are supported as Pre/Post scripts. Other runbook types like Python 3, Graphical, PowerShell Workflow, Graphical PowerShell Workflow are currently not supported as Pre/Post scripts.
+Currently, only PowerShell 5.1 and Python 2 runbooks are supported as Pre/Post scripts. Other runbook types like Python 3, Graphical, PowerShell Workflow, Graphical PowerShell Workflow are currently not supported as Pre/Post scripts.
 
 ## Pre-script and post-script parameters
 

@@ -2,7 +2,8 @@
 title: Declare resources in Bicep
 description: Describes how to declare resources to deploy in Bicep.
 ms.topic: conceptual
-ms.date: 09/28/2022
+ms.custom: devx-track-bicep
+ms.date: 03/20/2024
 ---
 
 # Resource declaration in Bicep
@@ -22,14 +23,14 @@ resource <symbolic-name> '<full-type-name>@<api-version>' = {
 So, a declaration for a storage account can start with:
 
 ```bicep
-resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
+resource stg 'Microsoft.Storage/storageAccounts@2023-04-01' = {
   ...
 }
 ```
 
 Symbolic names are case-sensitive. They may contain letters, numbers, and underscores (`_`). They can't start with a number. A resource can't have the same name as a parameter, variable, or module.
 
-For the available resource types and version, see [Bicep resource reference](/azure/templates/). Bicep doesn't support `apiProfile`, which is available in [Azure Resource Manager templates (ARM templates) JSON](../templates/syntax.md).
+For the available resource types and version, see [Bicep resource reference](/azure/templates/). Bicep doesn't support `apiProfile`, which is available in [Azure Resource Manager templates (ARM templates) JSON](../templates/syntax.md). You can also define Bicep extensibility provider resources. For more information, see [Bicep extensibility Kubernetes provider](./bicep-extensibility-kubernetes-provider.md).
 
 To conditionally deploy a resource, use the `if` syntax. For more information, see [Conditional deployment in Bicep](conditional-resource-deployment.md).
 
@@ -63,7 +64,7 @@ resource <symbolic-name> '<full-type-name>@<api-version>' = {
 Each resource has a name. When setting the resource name, pay attention to the [rules and restrictions for resource names](../management/resource-name-rules.md).
 
 ```bicep
-resource stg 'Microsoft.Storage/storageAccounts@2019-06-01' = {
+resource stg 'Microsoft.Storage/storageAccounts@2023-04-01' = {
   name: 'examplestorage'
   ...
 }
@@ -76,7 +77,7 @@ Typically, you'd set the name to a parameter so you can pass in different values
 @maxLength(24)
 param storageAccountName string
 
-resource stg 'Microsoft.Storage/storageAccounts@2019-06-01' = {
+resource stg 'Microsoft.Storage/storageAccounts@2023-04-01' = {
   name: storageAccountName
   ...
 }
@@ -87,7 +88,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2019-06-01' = {
 Many resources require a location. You can determine if the resource needs a location either through intellisense or [template reference](/azure/templates/). The following example adds a location parameter that is used for the storage account.
 
 ```bicep
-resource stg 'Microsoft.Storage/storageAccounts@2019-06-01' = {
+resource stg 'Microsoft.Storage/storageAccounts@2023-04-01' = {
   name: 'examplestorage'
   location: 'eastus'
   ...
@@ -99,7 +100,7 @@ Typically, you'd set location to a parameter so you can deploy to different loca
 ```bicep
 param location string = resourceGroup().location
 
-resource stg 'Microsoft.Storage/storageAccounts@2019-06-01' = {
+resource stg 'Microsoft.Storage/storageAccounts@2023-04-01' = {
   name: 'examplestorage'
   location: location
   ...
@@ -128,7 +129,7 @@ az provider show \
 
 ## Tags
 
-You can apply tags to a resource during deployment. Tags help you logically organize your deployed resources. For examples of the different ways you can specify the tags, see [ARM template tags](../management/tag-resources.md#arm-templates).
+You can apply tags to a resource during deployment. Tags help you logically organize your deployed resources. For examples of the different ways you can specify the tags, see [ARM template tags](../management/tag-resources-bicep.md).
 
 ## Managed identities for Azure resources
 
@@ -139,7 +140,7 @@ You can use either system-assigned or user-assigned identities.
 The following example shows how to configure a system-assigned identity for an Azure Kubernetes Service cluster.
 
 ```bicep
-resource aks 'Microsoft.ContainerService/managedClusters@2020-09-01' = {
+resource aks 'Microsoft.ContainerService/managedClusters@2024-02-01' = {
   name: clusterName
   location: location
   tags: tags
@@ -153,7 +154,7 @@ The next example shows how to configure a user-assigned identity for a virtual m
 ```bicep
 param userAssignedIdentity string
 
-resource vm 'Microsoft.Compute/virtualMachines@2020-06-01' = {
+resource vm 'Microsoft.Compute/virtualMachines@2024-03-01' = {
   name: vmName
   location: location
   identity: {
@@ -171,7 +172,7 @@ The preceding properties are generic to most resource types. After setting those
 Use intellisense or [Bicep resource reference](/azure/templates/) to determine which properties are available and which ones are required. The following example sets the remaining properties for a storage account.
 
 ```bicep
-resource stg 'Microsoft.Storage/storageAccounts@2019-06-01' = {
+resource stg 'Microsoft.Storage/storageAccounts@2023-04-01' = {
   name: 'examplestorage'
   location: 'eastus'
   sku: {

@@ -1,10 +1,10 @@
 ---
 title: Collect SAP HANA audit logs in Microsoft Sentinel | Microsoft Docs
 description: This article explains how to collect audit logs from your SAP HANA database.
-author: msftandrelom
-ms.author: andrelom
+author: batamig
+ms.author: bagol
 ms.topic: how-to
-ms.date: 03/02/2022
+ms.date: 06/09/2024
 ---
 
 # Collect SAP HANA audit logs in Microsoft Sentinel
@@ -14,7 +14,13 @@ This article explains how to collect audit logs from your SAP HANA database.
 > [!IMPORTANT]
 > Microsoft Sentinel SAP HANA support is currently in PREVIEW. The [Azure Preview Supplemental Terms](https://azure.microsoft.com/support/legal/preview-supplemental-terms/) include additional legal terms that apply to Azure features that are in beta, preview, or otherwise not yet released into general availability.
 
-If you have SAP HANA database audit logs configured with Syslog, you'll also need to configure your Log Analytics agent to collect the Syslog files.
+
+## Prerequisites
+
+SAP HANA logs are sent over Syslog. Make sure that your AMA agent or your Log Analytics agent (legacy) is configured to collect Syslog files. For more information, see:
+
+For more information, see [Ingest syslog and CEF messages to Microsoft Sentinel with the Azure Monitor Agent](../connect-cef-syslog-ama.md).
+
 
 ## Collect SAP HANA audit logs
 
@@ -25,49 +31,87 @@ If you have SAP HANA database audit logs configured with Syslog, you'll also nee
 
 1. Check your operating system Syslog files for any relevant HANA database events.
 
-1. Install and configure a Log Analytics agent on your machine:
+1. Sign into your HANA database operating system as a user with sudo privileges.
 
-    1. Sign in to your HANA database operating system as a user with sudo privileges.  
+1. Install an agent on your machine and confirm that your machine is connected. For more information, see:
 
-    1. In the Azure portal, go to your Log Analytics workspace. On the left pane, under **Settings**, select **Agents management** > **Linux servers**.  
+    - [Azure Monitor Agent](/azure/azure-monitor/agents/azure-monitor-agent-manage?tabs=azure-portal)
+    - [Log Analytics Agent](../../azure-monitor/agents/agent-linux.md) (legacy)
 
-    1. Under **Download and onboard agent for Linux**, copy the code that's displayed in the box to your terminal, and then run the script.
+1. Configure your agent to collect Syslog data. For more information, see:
 
-    The Log Analytics agent is installed on your machine and connected to your workspace. For more information, see [Install Log Analytics agent on Linux computers](../../azure-monitor/agents/agent-linux.md) and [OMS Agent for Linux](https://github.com/microsoft/OMS-Agent-for-Linux) on the Microsoft GitHub repository.
-
-1. Refresh the **Agents Management > Linux servers** tab to confirm that you have **1 Linux computers connected**.
-
-1. On the left pane, under **Settings**, select **Agents configuration**, and then select the **Syslog** tab.
-
-1. Select **Add facility** to add the facilities you want to collect. 
+    - [Azure Monitor Agent](/azure/azure-monitor/agents/data-collection-syslog)
+    - [Log Analytics Agent](/azure/azure-monitor/agents/data-sources-syslog) (legacy)
 
     > [!TIP]
-    > Because the facilities where HANA database events are saved can change between different distributions, we recommend that you add all facilities, check them against your Syslog logs, and then remove any that aren't relevant.
+    > Because the facilities where HANA database events are saved can change between different distributions, we recommend that you add all facilities. Check them against your Syslog logs, and then remove any that aren't relevant.
     >
 
-1. In Microsoft Sentinel, check to confirm that HANA database events are now shown in the ingested logs.
+## Verify your configuration
 
-## Next steps
+In Microsoft Sentinel, check to confirm that HANA database events are now shown in the ingested logs. For example, run the following query:
 
-Learn more about the Microsoft Sentinel Solution for SAP:
+```Kusto
+//generated function structure for custom log Syslog
+// generated on 2024-05-07
+let D_Syslog = datatable(TimeGenerated:datetime
+,EventTime:datetime
+,Facility:string
+,HostName:string
+,SeverityLevel:string
+,ProcessID:int
+,HostIP:string
+,ProcessName:string
+,Type:string
+)['1000-01-01T00:00:00Z', '1000-01-01T00:00:00Z', 'initialString', 'initialString', 'initialString', 'initialString',1,'initialString', 'initialString', 'initialString'];
 
-- [Deploy Microsoft Sentinel Solution for SAP](deployment-overview.md)
-- [Prerequisites for deploying Microsoft Sentinel Solution for SAP](prerequisites-for-deploying-sap-continuous-threat-monitoring.md)
+let T_Syslog = (Syslog | project
+TimeGenerated = column_ifexists('TimeGenerated', '1000-01-01T00:00:00Z')
+,EventTime = column_ifexists('EventTime', '1000-01-01T00:00:00Z')
+,Facility = column_ifexists('Facility', 'initialString')
+,HostName = column_ifexists('HostName', 'initialString')
+,SeverityLevel = column_ifexists('SeverityLevel', 'initialString')
+,ProcessID = column_ifexists('ProcessID', 1)
+,HostIP = column_ifexists('HostIP', 'initialString')
+,ProcessName = column_ifexists('ProcessName', 'initialString')
+,Type = column_ifexists('Type', 'initialString')
+);
+T_Syslog | union isfuzzy= true (D_Syslog | where TimeGenerated != '1000-01-01T00:00:00Z')
+```
+
+
+## Add analytics rules for SAP HANA
+
+Use the following built-in analytics rules to have Microsoft Sentinel start triggering alerts on related SAP HANA activity:
+
+- **SAP - (PREVIEW) HANA DB -Assign Admin Authorizations**
+- **SAP - (PREVIEW) HANA DB -Audit Trail Policy Changes**
+- **SAP - (PREVIEW) HANA DB -Deactivation of Audit Trail**
+- **SAP - (PREVIEW) HANA DB -User Admin actions**
+
+For more information, see [Microsoft Sentinel solution for SAP® applications: security content reference](sap-solution-security-content.md).
+
+## Related content
+
+Learn more about the Microsoft Sentinel solution for SAP® applications:
+
+- [Deploy Microsoft Sentinel solution for SAP® applications](deployment-overview.md)
+- [Prerequisites for deploying Microsoft Sentinel solution for SAP® applications](prerequisites-for-deploying-sap-continuous-threat-monitoring.md)
 - [Deploy SAP Change Requests (CRs) and configure authorization](preparing-sap.md)
+- [Deploy the solution content from the content hub](deploy-sap-security-content.md)
 - [Deploy and configure the container hosting the SAP data connector agent](deploy-data-connector-agent-container.md)
-- [Deploy SAP security content](deploy-sap-security-content.md)
 - [Deploy the SAP data connector with SNC](configure-snc.md)
+- [Monitor the health of your SAP system](../monitor-sap-system-health.md)
 - [Enable and configure SAP auditing](configure-audit.md)
 
 Troubleshooting:
 
-- [Troubleshoot your Microsoft Sentinel Solution for SAP deployment](sap-deploy-troubleshoot.md)
-- [Configure SAP Transport Management System](configure-transport.md)
+- [Troubleshoot your Microsoft Sentinel solution for SAP® applications deployment](sap-deploy-troubleshoot.md)
 
 Reference files:
 
-- [Microsoft Sentinel Solution for SAP data reference](sap-solution-log-reference.md)
-- [Microsoft Sentinel Solution for SAP: security content reference](sap-solution-security-content.md)
+- [Microsoft Sentinel solution for SAP® applications data reference](sap-solution-log-reference.md)
+- [Microsoft Sentinel solution for SAP® applications: security content reference](sap-solution-security-content.md)
 - [Kickstart script reference](reference-kickstart.md)
 - [Update script reference](reference-update.md)
 - [Systemconfig.ini file reference](reference-systemconfig.md)

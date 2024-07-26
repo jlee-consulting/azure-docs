@@ -3,25 +3,26 @@ title: Configure role-based access control in Azure Cosmos DB for MongoDB databa
 description: Learn how to configure native role-based access control in Azure Cosmos DB for MongoDB
 author: gahl-levy
 ms.service: cosmos-db
-ms.custom: ignite-2022
+ms.custom: devx-track-azurecli, devx-track-extended-java, devx-track-js
 ms.topic: how-to
 ms.date: 09/26/2022
 ms.author: gahllevy
+ms.subservice: mongodb
 ---
 
 # Configure role-based access control in Azure Cosmos DB for MongoDB
-[!INCLUDE[MongoDB](../includes/appliesto-mongodb.md)]
+[!INCLUDE[MongoDB](~/reusable-content/ce-skilling/azure/includes/cosmos-db/includes/appliesto-mongodb.md)]
 
 This article is about role-based access control for data plane operations in Azure Cosmos DB for MongoDB.
 
-If you are using management plane operations, see [role-based access control](../role-based-access-control.md) applied to your management plane operations article.
+If you're using management plane operations, see [role-based access control](../role-based-access-control.md) applied to your management plane operations article.
 
 Azure Cosmos DB for MongoDB exposes a built-in role-based access control (RBAC) system that lets you authorize your data requests with a fine-grained, role-based permission model. Users and roles reside within a database and are managed using the Azure CLI, Azure PowerShell, or Azure Resource Manager (ARM).
 
 ## Concepts
 
 ### Resource
-A resource is a collection or database to which we are applying access control rules.
+A resource is a collection or database to which we're applying access control rules.
 
 ### Privileges
 Privileges are actions that can be performed on a specific resource. For example, "read access to collection xyz". Privileges are assigned to a specific role.
@@ -30,7 +31,7 @@ Privileges are actions that can be performed on a specific resource. For example
 A role has one or more privileges. Roles are assigned to users (zero or more) to enable them to perform the actions defined in those privileges. Roles are stored within a single database.
 
 ### Diagnostic log auditing
-An additional column called `userId` has been added to the `MongoRequests` table in the Azure Portal Diagnostics feature. This column will identify which user performed which data plan operation. The value in this column is empty when RBAC is not enabled. 
+Another column called `userId` has been added to the `MongoRequests` table in the Azure Portal Diagnostics feature. This column identifies which user performed which data plan operation. The value in this column is empty when RBAC isn't enabled. 
 
 ## Available Privileges
 #### Query and Write
@@ -62,19 +63,26 @@ An additional column called `userId` has been added to the `MongoRequests` table
 * listIndexes
 
 ## Built-in Roles
-These roles already exist on every database and do not need to be created.
+These roles already exist on every database and don't need to be created.
 
-### read
-Has the following privileges: changeStream, collStats, find, killCursors, listIndexes, listCollections
-
-### readWrite
-Has the following privileges: collStats, createCollection, dropCollection, createIndex, dropIndex, find, insert, killCursors, listIndexes, listCollections, remove, update
-
-### dbAdmin
-Has the following privileges: collStats, createCollection, createIndex, dbStats, dropCollection, dropDatabase, dropIndex, listCollections, listIndexes, reIndex
-
-### dbOwner
-Has the following privileges: collStats, createCollection, createIndex, dbStats, dropCollection, dropDatabase, dropIndex, listCollections, listIndexes, reIndex, find, insert, killCursors, listIndexes, listCollections, remove, update
+| | `read` | `readWrite` | `dbAdmin` | `dbOwner` |
+| --- | --- | --- | --- | --- |
+| **`changeStream`** | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
+| **`collStats`** | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
+| **`listCollections`** | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
+| **`listIndexes`** | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
+| **`createCollection`** | ✖️ No | ✅ Yes | ✅ Yes | ✅ Yes |
+| **`createIndex`** | ✖️ No | ✅ Yes | ✅ Yes | ✅ Yes |
+| **`dropCollection`** | ✖️ No | ✅ Yes | ✅ Yes | ✅ Yes |
+| **`dbStats`** | ✖️ No | ✖️ No | ✅ Yes | ✅ Yes |
+| **`dropDatabase`** | ✖️ No | ✖️ No | ✅ Yes | ✅ Yes |
+| **`reIndex`** | ✖️ No | ✖️ No | ✅ Yes | ✅ Yes |
+| **`find`** | ✅ Yes | ✅ Yes | ✖️ No | ✅ Yes |
+| **`killCursors`** | ✅ Yes | ✅ Yes | ✖️ No | ✅ Yes |
+| **`dropIndex`** | ✖️ No | ✅ Yes | ✅ Yes | ✅ Yes |
+| **`insert`** | ✖️ No | ✅ Yes | ✖️ No | ✅ Yes |
+| **`remove`** | ✖️ No | ✅ Yes | ✖️ No | ✅ Yes |
+| **`update`** | ✖️ No | ✅ Yes | ✖️ No | ✅ Yes |
 
 ## Azure CLI Setup (Quickstart)
 We recommend using the cmd when using Windows.
@@ -86,7 +94,7 @@ az cloud set -n  AzureCloud
 az login
 az account set --subscription <your subscription ID>
 ```
-3. Enable the RBAC capability on your existing API for MongoDB database account. You'll need to [add the capability](how-to-configure-capabilities.md) "EnableMongoRoleBasedAccessControl" to your database account. RBAC can also be enabled via the features tab in the Azure portal instead. 
+3. Enable the RBAC capability on your existing API for MongoDB database account. You need to [add the capability](how-to-configure-capabilities.md) "EnableMongoRoleBasedAccessControl" to your database account. RBAC can also be enabled via the features tab in the Azure portal instead. 
 If you prefer a new database account instead, create a new database account with the RBAC capability set to true.
 ```powershell
 az cosmosdb create -n <account_name> -g <azure_resource_group> --kind MongoDB --capabilities EnableMongoRoleBasedAccessControl
@@ -119,6 +127,12 @@ MongoClient client = new MongoClient(uri);
 ## Authenticate using Mongosh
 ```powershell
 mongosh --authenticationDatabase <YOUR_DB> --authenticationMechanism SCRAM-SHA-256 "mongodb://<YOUR_USERNAME>:<YOUR_PASSWORD>@<YOUR_HOST>:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000"
+```
+
+## Authenticate using MongoDB Compass/Azure Data Studio
+```bash
+connectionString = "mongodb://" + "<YOUR_USER>" + ":" + "<YOUR_PASSWORD>" + "@" + "<YOUR_HOSTNAME>" + ":10255/" + "?ssl=true&retrywrites=false&replicaSet=globaldb&authmechanism=SCRAM-SHA-256&appname=@" + "<YOUR appName FROM CONNECTION STRING IN AZURE PORTAL>" + "@"
++"&authSource=" +"<YOUR_DATABASE>";
 ```
 
 ## Azure CLI RBAC Commands
@@ -264,16 +278,17 @@ az cosmosdb mongodb user definition delete --account-name <account-name> --resou
 
 - The number of users and roles you can create must equal less than 10,000. 
 - The commands listCollections, listDatabases, killCursors, and currentOp are excluded from RBAC.
-- Users and Roles across databases are not supported.
+- Users and Roles across databases aren't supported.
 - A user's password can only be set/reset by through the Azure CLI / Azure PowerShell.
 - Configuring Users and Roles is only supported through Azure CLI / PowerShell. 
-- Disabling primary/secondary key authentication is not supported. We recommend rotating your keys to prevent access when enabling RBAC.
+- Disabling primary/secondary key authentication isn't supported. We recommend rotating your keys to prevent access when enabling RBAC.
+- RBAC policies for Cosmos DB for Mongo DB RU won't be automatically reinstated following a restore operation. You'll be required to reconfigure these policies after the restoration process is complete.
 
 ## Frequently asked questions (FAQs)
 
 ### Is it possible to manage role definitions and role assignments from the Azure portal?
 
-Azure portal support for role management is not available. However, RBAC can be enabled via the features tab in the Azure portal.
+Azure portal support for role management isn't available. However, RBAC can be enabled via the features tab in the Azure portal.
 
 ### How do I change a user's password?
 

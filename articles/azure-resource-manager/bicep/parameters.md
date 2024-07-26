@@ -1,10 +1,9 @@
 ---
 title: Parameters in Bicep files
 description: Describes how to define parameters in a Bicep file.
-author: mumian
-ms.author: jgao
 ms.topic: conceptual
-ms.date: 09/28/2022
+ms.custom: devx-track-bicep
+ms.date: 03/22/2024
 ---
 
 # Parameters in Bicep
@@ -15,7 +14,7 @@ Resource Manager resolves parameter values before starting the deployment operat
 
 Each parameter must be set to one of the [data types](data-types.md).
 
-You are limited to 256 parameters in a Bicep file. For more information, see [Template limits](../templates/best-practices.md#template-limits).
+Bicep allows a maximum of 256 parameters. For more information, see [Template limits](../templates/best-practices.md#template-limits).
 
 For parameter best practices, see [Parameters](./best-practices.md#parameters).
 
@@ -43,6 +42,25 @@ param demoObject object
 param demoArray array
 ```
 
+The `param` keyword is also used in [.bicepparam files](./parameter-files.md). In .bicepparam files, you don't need to specify the data type as it is defined in Bicep files.
+
+```bicep
+param <parameter-name> = <value>
+```
+
+For more information, see [Parameters file](./parameter-files.md).
+
+User-defined type expressions can be used as the type clause of a `param` statement. For example:
+
+```bicep
+param storageAccountConfig {
+  name: string
+  sku: string
+}
+```
+
+For more information, see [User-defined data types](./user-defined-data-types.md#syntax).
+
 ## Default value
 
 You can specify a default value for a parameter. The default value is used when a value isn't provided during deployment.
@@ -59,7 +77,15 @@ param location string = resourceGroup().location
 
 You can use another parameter value to build a default value. The following template constructs a host plan name from the site name.
 
-:::code language="bicep" source="~/azure-docs-bicep-samples/syntax-samples/parameters/parameterswithfunctions.bicep" highlight="2":::
+```bicep
+param siteName string = 'site${uniqueString(resourceGroup().id)}'
+param hostingPlanName string = '${siteName}-plan'
+
+output siteNameOutput string = siteName
+output hostingPlanOutput string = hostingPlanName
+```
+
+However, you can't reference a [variable](./variables.md) as the default value.
 
 ## Decorators
 
@@ -79,7 +105,7 @@ The following table describes the available decorators and how to use them.
 
 | Decorator | Apply to | Argument | Description |
 | --------- | ---- | ----------- | ------- |
-| [allowed](#allowed-values) | all | array | Allowed values for the parameter. Use this decorator to make sure the user provides correct values. |
+| [allowed](#allowed-values) | all | array | Use this decorator to make sure the user provides correct values. This decorator is only permitted on `param` statements. To declare that a property must be one of a set of predefined values in a [`type`](./user-defined-data-types.md) or [`output`](./outputs.md) statement, use [union type syntax](./data-types.md#union-types). Union type syntax can also be used in `param` statements.|
 | [description](#description) | all | string | Text that explains how to use the parameter. The description is displayed to users through the portal. |
 | [maxLength](#length-constraints) | array, string | int | The maximum length for string and array parameters. The value is inclusive. |
 | [maxValue](#integer-constraints) | int | int | The maximum value for the integer parameter. This value is inclusive. |
@@ -122,6 +148,8 @@ You can define allowed values for a parameter. You provide the allowed values in
 ])
 param demoEnum string
 ```
+
+If you define allowed values for an array parameter, the actual value can be any subset of the allowed values.
 
 ### Length constraints
 
@@ -171,11 +199,11 @@ Storage account name restrictions:
 param storageAccountName string
 ```
 
-When you hover your cursor over **storageAccountName** in VSCode, you see the formatted text:
+When you hover your cursor over **storageAccountName** in VS Code, you see the formatted text:
 
 :::image type="content" source="./media/parameters/vscode-bicep-extension-description-decorator-markdown.png" alt-text="Use Markdown-formatted text in VSCode":::
 
-Make sure the text is well-formatted Markdown. Otherwise the text won't be rendered correctly.
+Make sure the text follows proper Markdown formatting; otherwise, it may not display correctly when rendered.
 
 ### Metadata
 
@@ -191,6 +219,8 @@ You might use this decorator to track information about the parameter that doesn
 })
 param settings object
 ```
+
+When you provide a `@metadata()` decorator with a property that conflicts with another decorator, that decorator always takes precedence over anything in the `@metadata()` decorator. So, the conflicting property within the `@metadata()` value is redundant and will be replaced. For more information, see [No conflicting metadata](./linter-rule-no-conflicting-metadata.md).
 
 ## Use parameter
 
@@ -211,10 +241,57 @@ It can be easier to organize related values by passing them in as an object. Thi
 
 The following example shows a parameter that is an object. The default value shows the expected properties for the object. Those properties are used when defining the resource to deploy.
 
-:::code language="bicep" source="~/azure-docs-bicep-samples/syntax-samples/parameters/parameterobject.bicep":::
+```bicep
+param vNetSettings object = {
+  name: 'VNet1'
+  location: 'eastus'
+  addressPrefixes: [
+    {
+      name: 'firstPrefix'
+      addressPrefix: '10.0.0.0/22'
+    }
+  ]
+  subnets: [
+    {
+      name: 'firstSubnet'
+      addressPrefix: '10.0.0.0/24'
+    }
+    {
+      name: 'secondSubnet'
+      addressPrefix: '10.0.1.0/24'
+    }
+  ]
+}
 
+resource vnet 'Microsoft.Network/virtualNetworks@2023-11-01' = {
+  name: vNetSettings.name
+  location: vNetSettings.location
+  properties: {
+    addressSpace: {
+      addressPrefixes: [
+        vNetSettings.addressPrefixes[0].addressPrefix
+      ]
+    }
+    subnets: [
+      {
+        name: vNetSettings.subnets[0].name
+        properties: {
+          addressPrefix: vNetSettings.subnets[0].addressPrefix
+        }
+      }
+      {
+        name: vNetSettings.subnets[1].name
+        properties: {
+          addressPrefix: vNetSettings.subnets[1].addressPrefix
+        }
+      }
+    ]
+  }
+}
+```
 
 ## Next steps
 
 - To learn about the available properties for parameters, see [Understand the structure and syntax of Bicep files](file.md).
 - To learn about passing in parameter values as a file, see [Create a Bicep parameter file](parameter-files.md).
+- To learn about providing parameter values at deployment, see [Deploy with Azure CLI](./deploy-cli.md), and [Deploy with Azure PowerShell](./deploy-powershell.md).

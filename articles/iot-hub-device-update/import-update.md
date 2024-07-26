@@ -31,7 +31,7 @@ An Azure CLI environment:
 
 * Use the Bash environment in [Azure Cloud Shell](../cloud-shell/quickstart.md).
 
-  [![Launch Cloud Shell in a new window](../../includes/media/cloud-shell-try-it/hdi-launch-cloud-shell.png)](https://shell.azure.com)
+  :::image type="icon" source="~/reusable-content/ce-skilling/azure/media/cloud-shell/launch-cloud-shell-button.png" alt-text="Button to launch the Azure Cloud Shell." border="false" link="https://shell.azure.com":::
 
 * Or, if you prefer to run CLI reference commands locally, [install the Azure CLI](/cli/azure/install-azure-cli)
 
@@ -48,7 +48,7 @@ An Azure CLI environment:
 
 This section shows how to import an update using either the Azure portal or the Azure CLI. You can also use the [Device Update for IoT Hub APIs](#if-youre-importing-using-apis-instead) to import an update instead.
 
-To import an update, you first upload the update files and import manifest into an Azure Storage container. Then, you import the update from Azure Storage into Device Update for IoT Hub.
+To import an update, you first upload the update files and import manifest into an Azure Storage container. Then, you import the update from Azure Storage into Device Update for IoT Hub, where it will be stored for you to deploy to devices.
 
 # [Azure portal](#tab/portal)
 
@@ -66,7 +66,7 @@ To import an update, you first upload the update files and import manifest into 
 
    :::image type="content" source="media/import-update/import-new-update-2-ppr.png" alt-text="Import New Update" lightbox="media/import-update/import-new-update-2-ppr.png":::
 
-5. Select **+ Select from storage container**. The Storage accounts UI is shown. Select an existing account, or create an account using **+ Storage account**. This account is used for a container to stage your updates for import.
+5. Select **+ Select from storage container**. The Storage accounts UI is shown. Select an existing account, or create an account using **+ Storage account**. This account is used for a container to stage your updates for import. The account should not have both public and private endpoints enabled at the same time. 
 
    :::image type="content" source="media/import-update/select-update-files-ppr.png" alt-text="Select Update Files" lightbox="media/import-update/select-update-files-ppr.png":::
 
@@ -106,7 +106,7 @@ To import an update, you first upload the update files and import manifest into 
 
 # [Azure CLI](#tab/cli)
 
-The [az iot du update stage](/cli/azure/iot/device-update/update#az-iot-du-update-stage) command handles the prerequisite steps of importing an update, including uploading the update files into a target storage container. An optional flag also lets this command automatically import the files after they're prepared. Otherwise, the [az iot du update import](/cli/azure/iot/device-update/update#az-iot-du-update-import) command completes the process.
+The [az iot du update stage](/cli/azure/iot/du/update#az-iot-du-update-stage) command handles the prerequisite steps of importing an update, including uploading the update files into a target storage container. An optional flag also lets this command automatically import the files after they're prepared. Otherwise, the [az iot du update import](/cli/azure/iot/du/update#az-iot-du-update-import) command completes the process.
 
 The `stage` command takes the following arguments:
 
@@ -154,9 +154,9 @@ az iot du update stage \
     --overwrite --then-import
 ```
 
-If you don't use the `--then-import` flag, the output of the `stage` command includes a prompt to run [az iot du update import](/cli/azure/iot/device-update/update#az-iot-du-update-import), including pre-populated arguments.
+If you don't use the `--then-import` flag, the output of the `stage` command includes a prompt to run [az iot du update import](/cli/azure/iot/du/update#az-iot-du-update-import), including pre-populated arguments.
 
-Use [az iot du update list](/cli/azure/iot/device-update/update#az-iot-du-update-list) to verify that your update or updates were successfully imported.
+Use [az iot du update list](/cli/azure/iot/du/update#az-iot-du-update-list) to verify that your update or updates were successfully imported.
 
 ```azurecli
 az iot du update list \
