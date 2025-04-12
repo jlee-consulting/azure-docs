@@ -7,8 +7,8 @@ ms.author: sipa
 ms.date: 11/15/2021
 ms.topic: how-to
 ms.service: azure-maps
+ms.subservice: rest-sdk
 ms.custom: devx-track-js, devx-track-ts
-services: azure-maps
 ---
 
 # JavaScript/TypeScript REST SDK Developers Guide (preview)
@@ -70,10 +70,10 @@ mapsDemo
 
 ## Create and authenticate a MapsSearchClient
 
-You need a `credential` object for authentication when creating the `MapsSearchClient` object used to access the Azure Maps search APIs. You can use either a Microsoft Entra credential or an Azure subscription key to authenticate. For more information on authentication, see [Authentication with Azure Maps].
+You need a `credential` object for authentication when creating the `MapsSearchClient` object used to access the Azure Maps Search APIs. You can use either a Microsoft Entra credential or an Azure subscription key to authenticate. For more information on authentication, see [Authentication with Azure Maps].
 
 > [!TIP]
-> The`MapsSearchClient` is the primary interface for developers using the Azure Maps search library. See [Azure Maps Search client library][JS-SDK] to learn more about the search methods available.
+> The`MapsSearchClient` is the primary interface for developers using the Azure Maps Search library. See [Azure Maps Search client library][JS-SDK] to learn more about the search methods available.
 
 <a name='using-an-azure-ad-credential'></a>
 
@@ -441,7 +441,7 @@ main().catch((err) => {
 [listSas]: /javascript/api/%40azure/arm-maps/accounts#@azure-arm-maps-accounts-listsas
 [managedIdentity]: https://techcommunity.microsoft.com/t5/azure-maps-blog/managed-identities-for-azure-maps/ba-p/3666312
 [Node.js Release Working Group]: https://github.com/nodejs/release#release-schedule
-[Node.js]: https://nodejs.org/en/download/
+[Node.js]: https://nodejs.org/en/download/package-manager/
 [search package]: https://www.npmjs.com/package/@azure-rest/maps-search
 [search readme]: https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/maps/maps-search-rest/README.md
 [search sample]: https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/maps/maps-search-rest/samples/

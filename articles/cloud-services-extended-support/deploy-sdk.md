@@ -2,15 +2,19 @@
 title: Deploy Azure Cloud Services (extended support) - SDK
 description: Deploy Azure Cloud Services (extended support) by using the Azure SDK.
 ms.topic: quickstart
-ms.service: cloud-services-extended-support
+ms.service: azure-cloud-services-extended-support
 author: gachandw
 ms.author: gachandw
 ms.reviewer: mimckitt
 ms.date: 07/24/2024
 ms.custom: devx-track-azurepowershell
+# Customer intent: As a cloud developer, I want to deploy Azure Cloud Services (extended support) using the SDK so that I can manage role-based applications and configurations programmatically through Resource Manager.
 ---
 
 # Deploy Cloud Services (extended support) by using the Azure SDK
+
+> [!IMPORTANT]
+> As of March 31, 2025, cloud Services (extended support) is deprecated and will be fully retired on March 31, 2027. [Learn more](https://aka.ms/csesretirement) about this deprecation and [how to migrate](https://aka.ms/cses-retirement-march-2025).
 
 This article shows how to use the [Azure SDK](https://azure.microsoft.com/downloads/) to create an Azure Cloud Services (extended support) deployment that has multiple roles (WebRole and WorkerRole). It also covers how to use the Remote Desktop Protocol (RDP) extension. Cloud Services (extended support) is a deployment model of Azure Cloud Services based on Azure Resource Manager.
 

@@ -1,16 +1,16 @@
 ---
-title:  Microsoft Azure Maps Weather services coverage
+title:  Microsoft Azure Maps Weather service coverage
 description: Learn about Microsoft Azure Maps Weather services coverage
-author: FarazGIS
+author: farazgis
 ms.author: fsiddiqui
 ms.date: 11/08/2022
 ms.topic: conceptual
 ms.service: azure-maps
-services: azure-maps
+ms.subservice: weather
 ms.custom: references_regions
 ---
 
-# Azure Maps weather services coverage
+# Azure Maps Weather service coverage
 
 This article provides coverage information for Azure Maps [Weather services].
 
@@ -332,11 +332,11 @@ Radar tiles, showing areas of rain, snow, ice and mixed conditions, are returned
 > [Weather services in Azure Maps]
 
 > [!div class="nextstepaction"]
-> [Azure Maps weather services frequently asked questions (FAQ)]
+> [Azure Maps Weather services frequently asked questions (FAQ)]
 
 [active storms]: /rest/api/maps/weather/get-tropical-storm-active
 [Actuals]: /rest/api/maps/weather/get-daily-historical-actuals
-[Azure Maps weather services frequently asked questions (FAQ)]: weather-services-faq.yml
+[Azure Maps Weather services frequently asked questions (FAQ)]: weather-services-faq.yml
 [current]: /rest/api/maps/weather/get-current-air-quality
 [daily]: /rest/api/maps/weather/get-air-quality-daily-forecasts
 [forecasts]: /rest/api/maps/weather/get-tropical-storm-forecast
